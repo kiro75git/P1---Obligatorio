@@ -1,4 +1,31 @@
-let listaRegistrados = [["lucas@gmail", "Lucas", "123", "admin"], ["maria@gmail", "Maria", "435", "cliente"]];
+//usuarios precargados
+
+class Usuarios {
+    constructor(nombreIng, correoIng, contrasenaIng,  tipoUsuarioIng) {
+        this.nombre = nombreIng;
+        this.correo = correoIng;
+        this.contrasena = contrasenaIng;
+        this.tipoUsuario = tipoUsuarioIng;
+    }
+}
+
+class Sistema {
+    constructor() {
+        this.usuarios = [
+            new Usuarios("lucas@gmail", "Lucas", "123", "ad"),
+            new Usuarios("maria@gmail", "Maria", "435", "cl")
+        ];
+    }
+
+    agregarUsuario(mail, nombre, pass, tipo) {
+        let objUsuario = new Usuarios(mail, pass, nombre, tipo);
+        this.usuarios.push(objUsuario);
+    }
+}
+
+//registro de usuarios
+
+let sistema = new Sistema()
 
 function Registrar() {
     let mailInput = String(document.querySelector("#ingresoMail").value);
@@ -6,7 +33,17 @@ function Registrar() {
     let nombreInput = String(document.querySelector("#ingresoNombre").value);
 
     if(VerificarPass(passInput) === "OK") {
-        listaRegistrados.push( [mailInput, nombreInput, passInput, "cliente"] );
+        if(verificarNombreYapellido(nombreInput)) {
+            sistema.agregarUsuario(mailInput, nombreInput, passInput, "cliente");
+            // new Usuarios (nombreIng, edadIng, nacionalidadIng);
+            // Sistema.push(usuarios);
+            // console.log();
+            
+            document.querySelector("#pErrores").innerHTML = `Correcto!`
+            console.log(sistema.usuarios);
+        }else{
+            document.querySelector("#pErrores").innerHTML = `Ingrese su nombre y apellido separados por un espacio.`;
+        }
     }else{
         // Error con los datos ingresados
         document.querySelector("#pErrores").innerHTML = `${VerificarPass(passInput)}`;
@@ -14,7 +51,7 @@ function Registrar() {
 }
 document.querySelector("#btnRegistro").addEventListener("click", Registrar);
 
-
+//funcion para verificar contraseña
 function VerificarPass(pass) {
     let error = "ninguno";
     let password = pass;
@@ -78,18 +115,57 @@ function VerificarPass(pass) {
     return mensaje;
 }
 
-function Ingresar(mail, pass) {
-
+let tipoDeSesion = 'cerrada';
+function Ingresar() {
+    let passInput = String(document.querySelector("#ingresoContra").value);
+    let mailInput = String(document.querySelector("#ingresoMail").value);
+    let tipoDeUsuario = String(document.querySelector("#slcTipoUsuario").value);
 
     let encontrado = false;
-    for(let i=0; i < listaRegistrados.length; i++) {
-        if(mail === listaRegistrados[i[0]]) {
-            console.log('Usuario encontrado');
+
+    for(let i=0; i < objUsuario.length; i++) {
+        if(mailInput === objUsuario[i[0]]) {
+            console.log("Usuario encontrado");
             encontrado = true;
+            if(passInput === objUsuario[i[2]] && tipoDeUsuario === objUsuario[i[3]]) {
+                // bien
+                tipoDeSesion = tipoDeUsuario;
+                console.log(tipoDeSesion);
+            }else{
+                // mal
+                document.querySelector("#pErrores").innerHTML = "Las credenciales no coinciden, intentelo denuevo"
+            }
+        }
+    } 
+
+    
+
+    
+}
+document.querySelector("#btnInicioSesion").addEventListener("click", Ingresar);
+
+//funcion para verificar nombre y apellido
+
+function verificarNombreYapellido(nombreUsuario){
+    let verificarEspacio = false;
+    let hayEspacios = 0;
+    for(let i = 0; i < nombreUsuario.length; i++){
+        let valorCaracter = nombreUsuario.charAt(i);
+        
+        if(valorCaracter === " "){
+            hayEspacios++;
         }
     }
-    if(!encontrado) {
-        console.log('Usuario no encontrado')
+    
+    if(hayEspacios > 0){
+        verificarEspacio = true;
+    } else {
+        document.querySelector("#pErrores").innerHTML = "Las credenciales no coinciden, intentelo denuevo"
     }
+    
+    return verificarEspacio;
 }
+
+
+
 
