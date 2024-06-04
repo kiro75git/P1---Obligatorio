@@ -1,7 +1,7 @@
 //usuarios precargados
 
 class Usuarios {
-    constructor(nombreIng, correoIng, contrasenaIng,  tipoUsuarioIng) {
+    constructor(correoIng, nombreIng, contrasenaIng,  tipoUsuarioIng) {
         this.nombre = nombreIng;
         this.correo = correoIng;
         this.contrasena = contrasenaIng;
@@ -12,13 +12,13 @@ class Usuarios {
 class Sistema {
     constructor() {
         this.usuarios = [
-            new Usuarios("lucas@gmail", "Lucas", "123", "ad"),
-            new Usuarios("maria@gmail", "Maria", "435", "cl")
+            new Usuarios("lucas@gmail", "Lucas", "Lucas0000", "ad"),
+            new Usuarios("maria@gmail", "Maria", "Maria0000", "cl")
         ];
     }
 
     agregarUsuario(mail, nombre, pass, tipo) {
-        let objUsuario = new Usuarios(mail, pass, nombre, tipo);
+        let objUsuario = new Usuarios(mail, nombre, pass, tipo);
         this.usuarios.push(objUsuario);
     }
 }
@@ -32,21 +32,24 @@ function Registrar() {
     let passInput = String(document.querySelector("#ingresoContra").value);
     let nombreInput = String(document.querySelector("#ingresoNombre").value);
 
-    if(VerificarPass(passInput) === "OK") {
-        if(verificarNombreYapellido(nombreInput)) {
-            sistema.agregarUsuario(mailInput, nombreInput, passInput, "cliente");
+    
+    if(verificarNombreYapellido(nombreInput)) {
+        if(VerificarPass(passInput) === "OK") {
+            sistema.agregarUsuario(mailInput, nombreInput, passInput, "cl");
             // new Usuarios (nombreIng, edadIng, nacionalidadIng);
             // Sistema.push(usuarios);
             // console.log();
             
-            document.querySelector("#pErrores").innerHTML = `Correcto!`
+            document.querySelector("#pErrores").innerHTML = `Se registró correctamente! Ahora inice sesión.`
             console.log(sistema.usuarios);
         }else{
-            document.querySelector("#pErrores").innerHTML = `Ingrese su nombre y apellido separados por un espacio.`;
+            // Error con los datos ingresados
+            document.querySelector("#pErrores").innerHTML = `${VerificarPass(passInput)}`;
         }
     }else{
-        // Error con los datos ingresados
-        document.querySelector("#pErrores").innerHTML = `${VerificarPass(passInput)}`;
+        document.querySelector("#pErrores").innerHTML = `Ingrese su nombre y apellido separados por un espacio.`;
+        document.querySelector("#ingresoNombre").removeAttribute("hidden");
+        document.querySelector("#labelIngresoNombre").removeAttribute("hidden");
     }
 }
 document.querySelector("#btnRegistro").addEventListener("click", Registrar);
@@ -115,7 +118,8 @@ function VerificarPass(pass) {
     return mensaje;
 }
 
-let tipoDeSesion = 'cerrada';
+let tipoDeSesion = 'Cerrada';
+let usuarioActivo;
 function Ingresar() {
     let passInput = String(document.querySelector("#ingresoContra").value);
     let mailInput = String(document.querySelector("#ingresoMail").value);
@@ -123,29 +127,28 @@ function Ingresar() {
 
     let encontrado = false;
 
-    for(let i=0; i < objUsuario.length; i++) {
-        if(mailInput === objUsuario[i[0]]) {
+    for(let i=0; i < sistema.usuarios.length; i++) {
+        if(mailInput === sistema.usuarios[i].correo) {
             console.log("Usuario encontrado");
             encontrado = true;
-            if(passInput === objUsuario[i[2]] && tipoDeUsuario === objUsuario[i[3]]) {
+            if(passInput === sistema.usuarios[i].contrasena && tipoDeUsuario === sistema.usuarios[i].tipoUsuario) {
                 // bien
-                tipoDeSesion = tipoDeUsuario;
-                console.log(tipoDeSesion);
+                ExitoAlIniciarSesion(tipoDeUsuario, sistema.usuarios[i].nombre)
+                break;
             }else{
                 // mal
                 document.querySelector("#pErrores").innerHTML = "Las credenciales no coinciden, intentelo denuevo"
             }
         }
+        
     } 
 
     
 
     
 }
+
 document.querySelector("#btnInicioSesion").addEventListener("click", Ingresar);
-
-//funcion para verificar nombre y apellido
-
 function verificarNombreYapellido(nombreUsuario){
     let verificarEspacio = false;
     let hayEspacios = 0;
@@ -167,5 +170,19 @@ function verificarNombreYapellido(nombreUsuario){
 }
 
 
+// INICIO DE SESION EXITOSO
 
+function ExitoAlIniciarSesion(sesionDelUsuario, nombreDelUsuario) {
 
+    if(sesionDelUsuario === "ad"){
+        tipoDeSesion = "Administrador";
+    }else{
+        tipoDeSesion = "Cliente";
+    }
+
+    document.querySelector("#pErrores").innerHTML = `Ha iniciado sesión como ${nombreDelUsuario}, su perfil tiene permisos de ${tipoDeSesion.toLowerCase()}`;
+
+    // Mas tarde agregar funcion que cambie el aspecto de la pagina en base a que tipo de sesión se inició
+    
+    document.querySelector("#formInicioSesion").setAttribute("hidden", "hidden");
+}

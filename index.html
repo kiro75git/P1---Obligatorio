@@ -6,28 +6,29 @@
     <title>Obligatorio de programación</title>
 </head>
 <body>
-    <h1>INICIO DE SESION</h1>
+    <form id="formInicioSesion">
+        <h1>INICIO DE SESION</h1>
 
-    <label for="ingresoNombre">Nombre y apellido:</label>
-    <input type="email" id="ingresoNombre" placeholder="Luis Suarez"> <br>
+        <label for="ingresoNombre" id="labelIngresoNombre" hidden>Nombre y apellido:</label>
+        <input type="email" id="ingresoNombre" placeholder="Luis Suarez" hidden> <br>
 
-    <label for="ingresoMail">Mail:</label>
-    <input type="email" id="ingresoMail" placeholder="Admin@gmail.com"> <br>
+        <label for="ingresoMail">Mail:</label>
+        <input type="email" id="ingresoMail" placeholder="Admin@gmail.com">
 
-    <label for="ingresoContra">Contraseña:</label>
-    <input type="password" id="ingresoContra" placeholder="Ingrese contraseña">
+        <label for="ingresoContra">Contraseña:</label>
+        <input type="password" id="ingresoContra" placeholder="Ingrese contraseña">
 
-    <select id="slcTipoUsuario">
-        <option value="nd">--seleccione--</option>
-        <option value="ad">Administrador</option>
-        <option value="cl">Cliente</option>
-    </select> <br> <br>
+        <select id="slcTipoUsuario">
+            <option value="nd">--seleccione--</option>
+            <option value="ad">Administrador</option>
+            <option value="cl">Cliente</option>
+        </select> <br> <br>
 
-    <input type="button" value="Iniciar Sesión" id="btnInicioSesion">
-    <input type="button" value="Registrarse" id="btnRegistro">
+        <input type="button" value="Iniciar Sesión" id="btnInicioSesion">
+        <input type="button" value="Registrarse" id="btnRegistro">
 
+    </form>
     <p id="pErrores"></p>
-
     
  <script src="js/codigo.js"></script>
 </body>
