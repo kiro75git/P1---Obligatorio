@@ -1,26 +1,93 @@
+// DEBUG //
+let saldoInicialDeUsuarioNuevo = 10000;
+// DEBUG //
+
+let tipoDeSesion = 'cerrada';
+let usuarioActivo = "";
+let saldoDelUsuarioActivo = 0;
+
+function mostrarSeccion() {
+    let idBoton = this.getAttribute("id");//"btnSeccionAgregar"
+    let idSeccion = idBoton.charAt(3).toLowerCase() + idBoton.substring(4);//"seccionAgregar"
+    cambiarSeccion(idSeccion);
+}
+
+let elementosOcultables = document.querySelectorAll(".elementoOcultable");
+for (let i = 0; i < elementosOcultables.length; i++) {
+    const eo = elementosOcultables[i];
+    eo.addEventListener("click", mostrarSeccion);
+}
+
+function cambiarSeccion(nuevaSeccion) {
+    ocultarSecciones();
+    document.querySelector("#" + nuevaSeccion).style.display = "block";
+    if(nuevaSeccion === "sectSesion") {
+        CerrarSesion();
+    }
+}
+
+cambiarSeccion("sectSesion");
+
+function ocultarSecciones() {
+    let secciones = document.querySelectorAll(".seccion");
+    for (let i = 0; i < secciones.length; i++) {
+        const unaSeccion = secciones[i];
+        unaSeccion.style.display = "none";
+    }
+}
+
+function mostrarElementosOcultos(tipoUsuario) {
+    let elementosOcultables = document.querySelectorAll(".elementoOcultable");
+    for (let i = 0; i < elementosOcultables.length; i++) {
+        const elementoOcultable = elementosOcultables[i];
+        elementoOcultable.style.display = "none";
+    }
+    let visibilidadVariables = document.querySelectorAll(".visibilidadVariable");
+    for (let i = 0; i < visibilidadVariables.length; i++) {
+        const visibilidadVariable = visibilidadVariables[i];
+        visibilidadVariable.style.display = "none";
+    }
+
+    let elementosOcultablesMostrar = document.querySelectorAll("." + tipoUsuario)
+    for (let i = 0; i < elementosOcultablesMostrar.length; i++) {
+        const eoMostrar = elementosOcultablesMostrar[i];
+        eoMostrar.style.display = "block";
+    }
+    let visibilidadVariablesMostrar = document.querySelectorAll("." + tipoUsuario)
+    for (let i = 0; i < visibilidadVariablesMostrar.length; i++) {
+        const vvMostrar = visibilidadVariablesMostrar[i];
+        vvMostrar.style.display = "block";
+    }
+}
+
+mostrarElementosOcultos(tipoDeSesion);
+
+
+
 //usuarios precargados
 
 class Usuarios {
-    constructor(correoIng, nombreIng, usernameIng, tarjetaIng, contrasenaIng,  tipoUsuarioIng,) {
+    constructor(correoIng, nombreIng, usernameIng, tarjetaIng, contrasenaIng,  tipoUsuarioIng, saldoIng) {
         this.nombre = nombreIng;
         this.correo = correoIng;
         this.username = usernameIng;
         this.tarjeta = tarjetaIng;
         this.contrasena = contrasenaIng;
         this.tipoUsuario = tipoUsuarioIng;
+        this.saldo = saldoIng;
     }
 }
 
 class Sistema {
     constructor() {
         this.usuarios = [
-            new Usuarios("lucas@gmail", "Lucas", "lucasbenta", "4456-6765-8409-1010", "Lucas0000", "ad"),
-            new Usuarios("maria@gmail", "Maria", "mariaadu", "3267-8902-5986-1232", "Maria0000", "cl")
+            new Usuarios("lucas@gmail", "Lucas", "lucasbenta", "4456-6765-8409-1010", "Lucas0000", "admin", 50000),
+            new Usuarios("maria@gmail", "Maria", "mariaadu", "3267-8902-5986-1232", "Maria0000", "cliente", 300000)
         ];
     }
 
-    agregarUsuario(mail, nombre, usuario, tarjetaCredito, pass, tipo) {
-        let objUsuario = new Usuarios(mail, nombre, usuario, tarjetaCredito, pass, tipo);
+    agregarUsuario(mail, nombre, usuario, tarjetaCredito, pass, tipo, saldo) {
+        let objUsuario = new Usuarios(mail, nombre, usuario, tarjetaCredito, pass, tipo, saldo);
         this.usuarios.push(objUsuario);
     }
 }
@@ -39,27 +106,25 @@ function Registrar() {
     
     if(verificarNombreYapellido(nombreInput)) {
         if(VerificarPass(passInput) === "OK") {
-            sistema.agregarUsuario(mailInput, nombreInput, usernameInput, tarjetaInput, passInput, "cl");
+            sistema.agregarUsuario(mailInput, nombreInput, usernameInput, tarjetaInput, passInput, "cliente", saldoInicialDeUsuarioNuevo);
             // new Usuarios (nombreIng, edadIng, nacionalidadIng);
             // Sistema.push(usuarios);
             // console.log();
             
-            document.querySelector("#pErrores").innerHTML = `Se registró correctamente! Ahora inice sesión.`
+            document.querySelector("#pError").innerHTML = `Se registró correctamente! Ahora inice sesión.`
+            document.querySelector("#formRegistro").style.display = "none";
             console.log(sistema.usuarios);
         }else{
             // Error con los datos ingresados
-            document.querySelector("#pErrores").innerHTML = `${VerificarPass(passInput)}`;
+            document.querySelector("#pError").innerHTML = `${VerificarPass(passInput)}`;
         }
     }else{
-        document.querySelector("#pErrores").innerHTML = `Ingrese su nombre y apellido separados por un espacio.`;
-        document.querySelector("#ingresoNombre").removeAttribute("hidden");
-        document.querySelector("#labelIngresoNombre").removeAttribute("hidden");
-        document.querySelector("#labelIngresoUsername").removeAttribute("hidden");
-        document.querySelector("#ingresoUsername").removeAttribute("hidden");
-        document.querySelector("#ingresoTarjeta").removeAttribute("hidden");
-        document.querySelector("#labelIngresoTarjeta").removeAttribute("hidden");
+        document.querySelector("#pError").innerHTML = `Ingrese su nombre y apellido separados por un espacio.`;
+        
+        document.querySelector("#formRegistro").style.display = "block";
     }
 }
+
 document.querySelector("#btnRegistro").addEventListener("click", Registrar);
 
 //funcion para verificar contraseña
@@ -126,35 +191,26 @@ function VerificarPass(pass) {
     return mensaje;
 }
 
-let tipoDeSesion = 'Cerrada';
-let usuarioActivo;
-
 function Ingresar() {
     let passInput = String(document.querySelector("#ingresoContra").value);
-    let mailInput = String(document.querySelector("#ingresoMail").value);
-    let tipoDeUsuario = String(document.querySelector("#slcTipoUsuario").value);
+    let usernameInput = String(document.querySelector("#ingresoUsername").value);
 
     let encontrado = false;
 
     for(let i=0; i < sistema.usuarios.length; i++) {
-        if(mailInput === sistema.usuarios[i].correo) {
+        if(usernameInput === sistema.usuarios[i].username) {
             console.log("Usuario encontrado");
             encontrado = true;
-            if(passInput === sistema.usuarios[i].contrasena && tipoDeUsuario === sistema.usuarios[i].tipoUsuario) {
+            if(passInput === sistema.usuarios[i].contrasena) {
                 // bien
-                ExitoAlIniciarSesion(tipoDeUsuario, sistema.usuarios[i].nombre)
+                ExitoAlIniciarSesion(sistema.usuarios[i].tipoUsuario, sistema.usuarios[i].nombre, sistema.usuarios[i].saldo)
                 break;
             }else{
                 // mal
-                document.querySelector("#pErrores").innerHTML = "Las credenciales no coinciden, intentelo denuevo"
+                document.querySelector("#pError").innerHTML = "Las credenciales no coinciden, intentelo denuevo"
             }
-        }
-        
+        }  
     } 
-
-    
-
-    
 }
 
 document.querySelector("#btnInicioSesion").addEventListener("click", Ingresar);
@@ -174,12 +230,13 @@ function verificarNombreYapellido(nombreUsuario){
     if(hayEspacios > 0){
         verificarEspacio = true;
     } else {
-        document.querySelector("#pErrores").innerHTML = "Las credenciales no coinciden, intentelo denuevo"
+        document.querySelector("#pError").innerHTML = "Las credenciales no coinciden, intentelo denuevo"
     }
     
     return verificarEspacio;
 }
 
+//verificar ingreso de tarjeta
 function validarTarjeta(nroTarjeta) {
     //funcion para verificar tarjeta:
 
@@ -222,39 +279,58 @@ function validarTarjeta(nroTarjeta) {
             return dev;
 
     }else {
-        document.querySelector("#pErrores").innerHTML = "ocurrió un error al ingresar los datos"
+        document.querySelector("#pError").innerHTML = "ocurrió un error al ingresar los datos"
     }
 }
-  
 
 // INICIO DE SESION EXITOSO
 
-function ExitoAlIniciarSesion(sesionDelUsuario, nombreDelUsuario) {
+function ExitoAlIniciarSesion(sesionDelUsuario, nombreDelUsuario, saldoDelUsuario) {
+    tipoDeSesion = sesionDelUsuario;
 
-    if(sesionDelUsuario === "ad"){
-        tipoDeSesion = "Administrador";
-    }else{
-        tipoDeSesion = "Cliente";
-    }
+    mostrarElementosOcultos(tipoDeSesion);
 
-    document.querySelector("#pErrores").innerHTML = `Ha iniciado sesión como ${nombreDelUsuario}, su perfil tiene permisos de ${tipoDeSesion.toLowerCase()}`;
+    cambiarSeccion("sectCatalogo");
 
-    // Mas tarde agregar funcion que cambie el aspecto de la pagina en base a que tipo de sesión se inició
-    
-    document.querySelector("#formInicioSesion").setAttribute("hidden", "hidden");
-    document.querySelector("#btnCerrarSesion").removeAttribute("hidden");
+    document.querySelector("#textoNavSesion").innerHTML = `Cerrar sesión`;
+
+    usuarioActivo = nombreDelUsuario;
+
+    saldoDelUsuarioActivo = saldoDelUsuario;
+
+    document.querySelector("#displayUsuario").innerHTML = `Sesión iniciada como ${nombreDelUsuario}`
+
+    document.querySelector("#displaySaldo").innerHTML = `Saldo: ${saldoDelUsuario}`
+
+    document.querySelector("#infoUsuario").style.display = "block";
 }
 
 function CerrarSesion() {
-    tipoDeSesion = "Cerrada";
-    document.querySelector("#pErrores").innerHTML = `Ha cerrado sesión`;
-    document.querySelector("#ingresoNombre").setAttribute("hidden", "hidden");
-    document.querySelector("#labelIngresoNombre").setAttribute("hidden", "hidden");
-    document.querySelector("#labelIngresoUsername").setAttribute("hidden", "hidden");
-    document.querySelector("#ingresoUsername").setAttribute("hidden", "hidden");
-    document.querySelector("#ingresoTarjeta").setAttribute("hidden", "hidden");
-    document.querySelector("#labelIngresoTarjeta").setAttribute("hidden", "hidden");
-    document.querySelector("#formInicioSesion").removeAttribute("hidden");
-    document.querySelector("#btnCerrarSesion").setAttribute("hidden", "hidden");
+    tipoDeSesion = "cerrada";
+
+    console.log("Se cerró la sesion");
+
+    mostrarElementosOcultos(tipoDeSesion);
+
+    document.querySelector("#textoNavSesion").innerHTML = `Iniciar sesión`;
+
+    usuarioActivo = "";
+
+    saldoDelUsuarioActivo = 0;
+
+    document.querySelector("#infoUsuario").style.display = "none";
 }
-document.querySelector("#btnCerrarSesion").addEventListener("click", CerrarSesion);
+
+//funcion boton de compra
+/*
+class Compras{
+    constructor(nombreProducto, precioProducto, unidadesProducto){
+        this.producto = nombreProducto;
+        this.precio = precioProducto;
+        this.unidades = unidadesProducto
+    }
+}
+
+document.querySelector("#btnCompra").addEventListener("click", RealizarPedido);
+
+*/

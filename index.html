@@ -3,40 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">
     <title>Obligatorio de programación</title>
 </head>
 <body>
-    <form id="formInicioSesion">
-        <h1>INICIO DE SESION</h1>
+    <header>
+        <img id="logo" src="https://p1.develotion.com/cart.jpg" alt="logo" />
+        <div id="infoUsuario" style="display:none;">
+            <h4 id="displayUsuario">Ejemplo</h4>
+            <h6 id="displaySaldo">Saldoejemplo: $940352</h6>
+        </div>
+        <nav>
+            <ul id="navPrincipal">
+                
+                <li id="btnSectCatalogo" class="elementoOcultable cliente admin">
+                    <a>Catálogo</a>
+                </li>
+                <li id="btnSectSesion" class="elementoOcultable cerrada cliente admin">
+                    <a id="textoNavSesion">Iniciar Sesión</a>
+                </li>
+                <li id="btnSectPedidos" class="elementoOcultable admin">
+                    <a>Pedidos</a>
+                </li>
+                
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="seccion" id="sectSesion">
+            <form id="formInicioSesion">
 
-        <label for="ingresoNombre" id="labelIngresoNombre" hidden>Nombre y apellido:</label>
-        <input type="email" id="ingresoNombre" placeholder="Luis Suarez" hidden> <br>
+                <h1>INICIO DE SESION</h1>
 
-        <label for="ingresoUsername" id="labelIngresoUsername" hidden>Nombre Usuario:</label>   <!--solo se verá al hacer click en registrar-->
-        <input type="text" id="ingresoUsername" placeholder="Luisito" hidden> <br> <br>
+                <label for="ingresoUsername">Nombre Usuario:</label>   <!--solo se verá al hacer click en registrar-->
+                <input type="text" id="ingresoUsername" placeholder="Luisito">
 
-        <label for="ingresoTarjeta" id="labelIngresoTarjeta" hidden>Tarjeta:</label>   <!--solo se verá al hacer click en registrar-->
-        <input type="text" id="ingresoTarjeta" placeholder="WWWW-XXXX-YYYY-ZZZZ" hidden> <br> <br>
+                <label for="ingresoContra">Contraseña:</label>
+                <input type="password" id="ingresoContra" placeholder="Ingrese contraseña">
 
-        <label for="ingresoMail">Mail:</label>
-        <input type="email" id="ingresoMail" placeholder="Admin@gmail.com">
+                <section class="subsection" id="formRegistro" style="display: none;">
 
-        <label for="ingresoContra">Contraseña:</label>
-        <input type="password" id="ingresoContra" placeholder="Ingrese contraseña">
+                    <br>
+                    <label for="ingresoNombre">Nombre y apellido:</label>
+                    <input type="email" id="ingresoNombre" placeholder="Luis Suarez">
+            
+                    <label for="ingresoTarjeta">Tarjeta:</label>
+                    <input type="text" id="ingresoTarjeta" placeholder="WWWW-XXXX-YYYY-ZZZZ">
+            
+                    <label for="ingresoMail">Mail:</label>
+                    <input type="email" id="ingresoMail" placeholder="Admin@gmail.com">
+            
+                </section>
 
-        <select id="slcTipoUsuario">
-            <option value="nd">--seleccione--</option>
-            <option value="ad">Administrador</option>
-            <option value="cl">Cliente</option>
-        </select> <br> <br>
+                <input type="button" value="Iniciar Sesión" id="btnInicioSesion">
+                <input type="button" value="Registrarse" id="btnRegistro">
+                
+                <p id="pError"></p>
 
-        <input type="button" value="Iniciar Sesión" id="btnInicioSesion">
-        <input type="button" value="Registrarse" id="btnRegistro">
+            </form>
+        </section>
 
-    </form>
-    <p id="pErrores"></p>
-    <input type="button" value="Cerrar sesión" id="btnCerrarSesion" hidden>
-    
+        <section class="seccion" id="sectCatalogo">
+            <h2>CATÁLOGO</h2> <br>
+            <h3>CAMPERAS</h3>
+            <article>
+            <div class="producto">
+                <figure>
+                    
+                    <img src="https://f.fcdn.app/imgs/63379c/www.globalsports.com.uy/gls/88f1/original/catalogo/NKBV2648-010-1/1500-1500/campera-nike-sportswear-club-black.jpg" alt="campera nike negra">
+                    <figcaption>
+                        <h4>Campera Nike</h4>
+                        <p>campera nike deportiva negra</p>
+                        <h5>$3200</h5>
+                        <div class="comprar">
+                            <input type="button" id="btnCompra" value="Comprar" class="visibilidadVariable admin">
+                            <input type="button" id="btnAñadirStock" value="Añadir Stock">
+                            <input type="number" id="cantStock" placeholder="ingrese stock (max10)">
+                            <select id="slcUnidades" class="visibilidadVariable admin">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                            </select>
+                        </div>
+                    </figcaption>
+                </figure>
+            </div>
+            
+            <div class="producto">
+            <figure>
+                <img src="https://f.fcdn.app/imgs/323a82/www.zooko.com.uy/zoo/37bb/original/catalogo/ADCW1256-1032-1/460x460/campera-adidas-superstar-tt-black.jpg" alt="campera adidas negra">
+                <figcaption>
+                    <h4>Campera Adidas</h4>
+                    <p>campera adidas deportiva negra</p>
+                    <h5>$2900</h5>
+                    <div class="comprar">
+                        <input type="button" id="btnCompra" value="Comprar"class="visibilidadVariable admin">
+                        <input type="button" id="btnAñadirStock" value="Añadir Stock">
+                        <input type="number" id="cantStock" placeholder="ingrese stock (max10)">
+                        <select id="slcUnidades" class="visibilidadVariable admin">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                        </select>
+                    </div>
+                </figcaption>
+                <div class="visibilidadVariable admin">
+                    <!-- OPCIONES PARA ADMIN -->
+                    <P>EJEMPLO SOLO ADMIN</P>
+                </div>
+            </figure>
+        </div>
+
+        <div class="producto">
+            <figure>
+                <img src="https://f.fcdn.app/imgs/85809b/www.globalsports.com.uy/gls/c9f9/original/catalogo/UA1364907-001-1/2000-2000/campera-under-armour-storm-insulate-black.jpg" alt="campera under armour negra">
+                <figcaption>
+                    <h4>Campera Under Armour</h4>
+                    <p>campera Under Armour de nylon negra</p>
+                    <h5>$5000</h5>
+                    <div class="comprar">
+                        <input type="button" id="btnCompra" value="Comprar" class="visibilidadVariable admin">
+                        <input type="button" id="btnAñadirStock" value="Añadir Stock">
+                        <input type="number" id="cantStock" placeholder="ingrese stock (max10)">
+                        <select id="slcUnidades" class="visibilidadVariable admin">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                        </select>
+                    </div>
+                </figcaption>
+            </figure>
+        </div>
+        </article>
+        </section>
+
+    </main>
  <script src="js/codigo.js"></script>
 </body>
 </html>
