@@ -12,6 +12,12 @@
         <label for="ingresoNombre" id="labelIngresoNombre" hidden>Nombre y apellido:</label>
         <input type="email" id="ingresoNombre" placeholder="Luis Suarez" hidden> <br>
 
+        <label for="ingresoUsername" id="labelIngresoUsername" hidden>Nombre Usuario:</label>   <!--solo se verá al hacer click en registrar-->
+        <input type="text" id="ingresoUsername" placeholder="Luisito" hidden> <br> <br>
+
+        <label for="ingresoTarjeta" id="labelIngresoTarjeta" hidden>Tarjeta:</label>   <!--solo se verá al hacer click en registrar-->
+        <input type="text" id="ingresoTarjeta" placeholder="WWWW-XXXX-YYYY-ZZZZ" hidden> <br> <br>
+
         <label for="ingresoMail">Mail:</label>
         <input type="email" id="ingresoMail" placeholder="Admin@gmail.com">
 
@@ -29,6 +35,7 @@
 
     </form>
     <p id="pErrores"></p>
+    <input type="button" value="Cerrar sesión" id="btnCerrarSesion" hidden>
     
  <script src="js/codigo.js"></script>
 </body>

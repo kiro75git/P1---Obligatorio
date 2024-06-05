@@ -1,9 +1,11 @@
 //usuarios precargados
 
 class Usuarios {
-    constructor(correoIng, nombreIng, contrasenaIng,  tipoUsuarioIng) {
+    constructor(correoIng, nombreIng, usernameIng, tarjetaIng, contrasenaIng,  tipoUsuarioIng,) {
         this.nombre = nombreIng;
         this.correo = correoIng;
+        this.username = usernameIng;
+        this.tarjeta = tarjetaIng;
         this.contrasena = contrasenaIng;
         this.tipoUsuario = tipoUsuarioIng;
     }
@@ -12,13 +14,13 @@ class Usuarios {
 class Sistema {
     constructor() {
         this.usuarios = [
-            new Usuarios("lucas@gmail", "Lucas", "Lucas0000", "ad"),
-            new Usuarios("maria@gmail", "Maria", "Maria0000", "cl")
+            new Usuarios("lucas@gmail", "Lucas", "lucasbenta", "4456-6765-8409-1010", "Lucas0000", "ad"),
+            new Usuarios("maria@gmail", "Maria", "mariaadu", "3267-8902-5986-1232", "Maria0000", "cl")
         ];
     }
 
-    agregarUsuario(mail, nombre, pass, tipo) {
-        let objUsuario = new Usuarios(mail, nombre, pass, tipo);
+    agregarUsuario(mail, nombre, usuario, tarjetaCredito, pass, tipo) {
+        let objUsuario = new Usuarios(mail, nombre, usuario, tarjetaCredito, pass, tipo);
         this.usuarios.push(objUsuario);
     }
 }
@@ -30,12 +32,14 @@ let sistema = new Sistema()
 function Registrar() {
     let mailInput = String(document.querySelector("#ingresoMail").value);
     let passInput = String(document.querySelector("#ingresoContra").value);
+    let usernameInput = String(document.querySelector("#ingresoUsername").value);
+    let tarjetaInput = String(document.querySelector("#ingresoTarjeta").value);
     let nombreInput = String(document.querySelector("#ingresoNombre").value);
 
     
     if(verificarNombreYapellido(nombreInput)) {
         if(VerificarPass(passInput) === "OK") {
-            sistema.agregarUsuario(mailInput, nombreInput, passInput, "cl");
+            sistema.agregarUsuario(mailInput, nombreInput, usernameInput, tarjetaInput, passInput, "cl");
             // new Usuarios (nombreIng, edadIng, nacionalidadIng);
             // Sistema.push(usuarios);
             // console.log();
@@ -50,6 +54,10 @@ function Registrar() {
         document.querySelector("#pErrores").innerHTML = `Ingrese su nombre y apellido separados por un espacio.`;
         document.querySelector("#ingresoNombre").removeAttribute("hidden");
         document.querySelector("#labelIngresoNombre").removeAttribute("hidden");
+        document.querySelector("#labelIngresoUsername").removeAttribute("hidden");
+        document.querySelector("#ingresoUsername").removeAttribute("hidden");
+        document.querySelector("#ingresoTarjeta").removeAttribute("hidden");
+        document.querySelector("#labelIngresoTarjeta").removeAttribute("hidden");
     }
 }
 document.querySelector("#btnRegistro").addEventListener("click", Registrar);
@@ -120,6 +128,7 @@ function VerificarPass(pass) {
 
 let tipoDeSesion = 'Cerrada';
 let usuarioActivo;
+
 function Ingresar() {
     let passInput = String(document.querySelector("#ingresoContra").value);
     let mailInput = String(document.querySelector("#ingresoMail").value);
@@ -149,6 +158,8 @@ function Ingresar() {
 }
 
 document.querySelector("#btnInicioSesion").addEventListener("click", Ingresar);
+
+//verificar ingreso nombre y apellido
 function verificarNombreYapellido(nombreUsuario){
     let verificarEspacio = false;
     let hayEspacios = 0;
@@ -169,6 +180,52 @@ function verificarNombreYapellido(nombreUsuario){
     return verificarEspacio;
 }
 
+function validarTarjeta(nroTarjeta) {
+    //funcion para verificar tarjeta:
+
+    let contadorGuiones = 0;
+        
+    for(let r = 0; r < nroTarjeta.length; r++){
+        let caracterPos =  nroTarjeta.charAt(r);
+            
+        if(caracterPos === "-"){
+            contadorGuiones++;
+        }
+    }
+
+    if (contadorGuiones === 3){
+            let acumulador = 0;
+            let digitoVerificar = nroTarjeta.charAt(nroTarjeta.length - 1);
+            let dev = false;
+            let cont = 0;
+            for (let i = nroTarjeta.length - 2; i >= 0; i--) {
+                let valorAcumular = Number(nroTarjeta.charAt(i));
+                if (cont % 2 === 0) {
+                    let duplicado = Number(nroTarjeta.charAt(i)) * 2;
+                    if (duplicado >= 10) {
+                        let duplicadoStr = String(duplicado);
+                        let suma = Number(duplicadoStr.charAt(0)) + Number(duplicadoStr.charAt(1));
+                        valorAcumular = suma;
+                    } else {
+                        valorAcumular = duplicado;
+                    }
+                }
+                acumulador += valorAcumular;
+                cont++;
+            }
+            let multiplicado = acumulador * 9;
+            let multiplicadoStr = String(multiplicado);
+            let digitoVerificador = multiplicadoStr.charAt(multiplicadoStr.length - 1);
+            if (digitoVerificar === digitoVerificador) {
+                dev = true;
+            }
+            return dev;
+
+    }else {
+        document.querySelector("#pErrores").innerHTML = "ocurrió un error al ingresar los datos"
+    }
+}
+  
 
 // INICIO DE SESION EXITOSO
 
@@ -185,4 +242,19 @@ function ExitoAlIniciarSesion(sesionDelUsuario, nombreDelUsuario) {
     // Mas tarde agregar funcion que cambie el aspecto de la pagina en base a que tipo de sesión se inició
     
     document.querySelector("#formInicioSesion").setAttribute("hidden", "hidden");
+    document.querySelector("#btnCerrarSesion").removeAttribute("hidden");
 }
+
+function CerrarSesion() {
+    tipoDeSesion = "Cerrada";
+    document.querySelector("#pErrores").innerHTML = `Ha cerrado sesión`;
+    document.querySelector("#ingresoNombre").setAttribute("hidden", "hidden");
+    document.querySelector("#labelIngresoNombre").setAttribute("hidden", "hidden");
+    document.querySelector("#labelIngresoUsername").setAttribute("hidden", "hidden");
+    document.querySelector("#ingresoUsername").setAttribute("hidden", "hidden");
+    document.querySelector("#ingresoTarjeta").setAttribute("hidden", "hidden");
+    document.querySelector("#labelIngresoTarjeta").setAttribute("hidden", "hidden");
+    document.querySelector("#formInicioSesion").removeAttribute("hidden");
+    document.querySelector("#btnCerrarSesion").setAttribute("hidden", "hidden");
+}
+document.querySelector("#btnCerrarSesion").addEventListener("click", CerrarSesion);
