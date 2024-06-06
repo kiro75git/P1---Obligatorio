@@ -322,15 +322,16 @@ function CerrarSesion() {
 }
 
 //funcion boton de compra
-/*
-class Compras{
-    constructor(nombreProducto, precioProducto, unidadesProducto){
-        this.producto = nombreProducto;
-        this.precio = precioProducto;
-        this.unidades = unidadesProducto
-    }
-}
 
-document.querySelector("#btnCompra").addEventListener("click", RealizarPedido);
+// class Compras{
+//     constructor(nombreProducto, precioProducto, unidadesProducto){
+//         this.producto = nombreProducto;
+//         this.precio = precioProducto;
+//         this.unidades = unidadesProducto
+//     }
+// }
 
-*/
+// document.querySelector("#btnCompra").addEventListener("click", RealizarPedido);
+
+
+
