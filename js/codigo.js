@@ -24,6 +24,9 @@ function cambiarSeccion(nuevaSeccion) {
     if(nuevaSeccion === "sectSesion") {
         CerrarSesion();
     }
+    if(nuevaSeccion === "sectCatalogo") {
+        ActualizarCatalogo();
+    }
 }
 
 cambiarSeccion("sectSesion");
@@ -78,12 +81,44 @@ class Usuarios {
     }
 }
 
+class Stock {
+    constructor(idProducto, nombreProducto, descripcionProducto, imagenProducto, precioProducto, ofertaProducto, activoProducto, stockProducto) {
+        this.id = idProducto;
+        this.nombre = nombreProducto;
+        this.descripcion = descripcionProducto;
+        this.imagen = imagenProducto;
+        this.precio = precioProducto;
+        this.oferta = ofertaProducto;
+        this.activo = activoProducto;
+        this.stock = stockProducto;
+    }
+}
+
+//funcion boton de compra
+
+class Compras{
+    constructor(nombreProducto, precioProducto, unidadesProducto){
+        this.producto = nombreProducto;
+        this.precio = precioProducto;
+        this.unidades = unidadesProducto
+    }
+}
+
+
 class Sistema {
     constructor() {
         this.usuarios = [
             new Usuarios("lucas@gmail", "Lucas", "lucasbenta", "4456-6765-8409-1010", "Lucas0000", "admin", 50000),
             new Usuarios("maria@gmail", "Maria", "mariaadu", "3267-8902-5986-1232", "Maria0000", "cliente", 300000)
         ];
+
+        this.productos = [
+            new Stock(1, "Campera Nike", "Campera marca Nike, deportiva negra", "https://f.fcdn.app/imgs/63379c/www.globalsports.com.uy/gls/88f1/original/catalogo/NKBV2648-010-1/1500-1500/campera-nike-sportswear-club-black.jpg", 3200, false, false, 30),
+            new Stock(2, "Campera Adidas", "Campera marca Adidas superstar, deportiva negra", "https://f.fcdn.app/imgs/323a82/www.zooko.com.uy/zoo/37bb/original/catalogo/ADCW1256-1032-1/460x460/campera-adidas-superstar-tt-black.jpg", 2900, false, true, 40),
+            new Stock(3, "Campera Under Armour", "Campera de nylon marca Under Armour negra", "https://f.fcdn.app/imgs/bd240e/menpi.uy/menpuy/3975/original/catalogo/1380868001-0-1/1500-1500/campera-under-armour-moda-hombre-strm-ins-run-hbd-jkt-black-s-c.jpg", 4000, false, true, 30)
+        ]
+
+        this.pedidos = []
     }
 
     agregarUsuario(mail, nombre, usuario, tarjetaCredito, pass, tipo, saldo) {
@@ -95,6 +130,59 @@ class Sistema {
 //registro de usuarios
 
 let sistema = new Sistema()
+
+function ActualizarCatalogo() {
+    document.querySelector("#seccionCargaProductosJS").innerHTML = "";
+    for(let i = 0; i < sistema.productos.length; i++) {
+        let productoActual = sistema.productos[i];
+        let stockDelProd = "";
+        let visibDelProd = "visibilidadVariable admin";
+        let mensajeInactivo = "visibilidadVariable";
+        let idDelProd = productoActual.id;
+        if(productoActual.stock > 0) {
+            stockDelProd = String(productoActual.stock);
+        }else{
+            stockDelProd = "SIN STOCK!";
+        }
+        if(productoActual.activo) {
+            visibDelProd = "visibilidadVariable admin cliente"
+        }else {
+            mensajeInactivo = "visibilidadVariable admin";
+        }
+
+        let options = "";
+        for(let i = 1; i <= stockDelProd; i++) {
+            options += `<option value="${i}">${i}</option>`;
+        }
+        
+        // Generacion del producto en el catálogo
+
+        document.querySelector("#seccionCargaProductosJS").innerHTML += `
+            <article class="producto ${visibDelProd}">
+                    <figure>
+                        <img src=${productoActual.imagen} alt=${productoActual.nombre}>
+                        <figcaption>
+                            <h4>${productoActual.nombre}</h4>
+                            <p>${productoActual.descripcion}</p>
+                            <h5>${productoActual.precio}</h5>
+                            <h5 class="${mensajeInactivo}"> EL PRODUCTO ESTA INACTIVO </h5>
+                            <div class="comprar">
+                                <input type="button" id="btnCompra${idDelProd}" value="Comprar">
+                                <form class="opcionesAdmin visibilidadVariable admin">
+                                    <input type="button" id="btnAñadirStock${idDelProd}" value="Añadir Stock">
+                                    <input type="number" id="cantStock${idDelProd}" placeholder="ingrese stock (max10)">
+                                </form>
+                                <select id="slcUnidades">
+                                    ${options}
+                                </select>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </article>
+        `
+    }
+    mostrarElementosOcultos(tipoDeSesion);
+}
 
 function Registrar() {
     let mailInput = String(document.querySelector("#ingresoMail").value);
@@ -290,13 +378,13 @@ function ExitoAlIniciarSesion(sesionDelUsuario, nombreDelUsuario, saldoDelUsuari
 
     mostrarElementosOcultos(tipoDeSesion);
 
-    cambiarSeccion("sectCatalogo");
-
     document.querySelector("#textoNavSesion").innerHTML = `Cerrar sesión`;
 
     usuarioActivo = nombreDelUsuario;
 
     saldoDelUsuarioActivo = saldoDelUsuario;
+
+    cambiarSeccion("sectCatalogo");
 
     document.querySelector("#displayUsuario").innerHTML = `Sesión iniciada como ${nombreDelUsuario}`
 
@@ -321,17 +409,52 @@ function CerrarSesion() {
     document.querySelector("#infoUsuario").style.display = "none";
 }
 
-//funcion boton de compra
-
-// class Compras{
-//     constructor(nombreProducto, precioProducto, unidadesProducto){
-//         this.producto = nombreProducto;
-//         this.precio = precioProducto;
-//         this.unidades = unidadesProducto
-//     }
-// }
-
-// document.querySelector("#btnCompra").addEventListener("click", RealizarPedido);
+// tomar pedidos y agregarlos al historial
 
 
+     function AgregarCompraYagregarHistorial(){
+        //bucle para encontrar id de producto deseado
+        for(let y = 0; y < Stock.length; y++){
+            let idProductoDeseado = this.id[i];
 
+        }
+
+        //bucle para realizar pedido
+
+        if(idProductoDeseado === 1){
+            for (let i = 0; i < productos.length; i++){
+                let producto = this.productos[i];
+                let nuevaCompra = new Compras(producto.nombre, producto.precio, unidades);
+                pedidos.push(nuevaCompra);
+                console.log(`Compra agregada: ${unidades} unidades de ${producto.nombre} a $${producto.precio} cada una.`);
+                 return; 
+             }
+        } else if(idProductoDeseado === 2){
+            for (let i = 0; i < productos.length; i++){
+                let producto = this.productos[i];
+                let nuevaCompra = new Compras(producto.nombre, producto.precio, unidades);
+                pedidos.push(nuevaCompra);
+                console.log(`Compra agregada: ${unidades} unidades de ${producto.nombre} a $${producto.precio} cada una.`);
+                 return; 
+             }
+        } else {
+            for (let i = 0; i < productos.length; i++){
+                let producto = this.productos[i];
+                let nuevaCompra = new Compras(producto.nombre, producto.precio, unidades);
+                pedidos.push(nuevaCompra);
+                console.log(`Compra agregada: ${unidades} unidades de ${producto.nombre} a $${producto.precio} cada una.`);
+                 return; 
+             }
+        }
+        
+
+         let historialCompras;
+
+         historialCompras += Compras;
+         console.log(historialCompras);
+ }
+
+        
+    
+
+    
