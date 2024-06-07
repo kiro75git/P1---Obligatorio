@@ -71,7 +71,7 @@ mostrarElementosOcultos(tipoDeSesion);
 
 //usuarios precargados
 
-class Usuarios {
+class Usuario {
     constructor(correoIng, nombreIng, usernameIng, tarjetaIng, contrasenaIng,  tipoUsuarioIng, saldoIng) {
         this.nombre = nombreIng;
         this.correo = correoIng;
@@ -80,6 +80,7 @@ class Usuarios {
         this.contrasena = contrasenaIng;
         this.tipoUsuario = tipoUsuarioIng;
         this.saldo = saldoIng;
+        
     }
 }
 
@@ -96,10 +97,9 @@ class Stock {
     }
 }
 
-//funcion boton de compra
-
-class Compras{
-    constructor(nombreProducto, precioProducto, unidadesProducto){
+class Compra{
+    constructor(usuarioPedido, nombreProducto, precioProducto, unidadesProducto){
+        this.Usuario = usuarioPedido;
         this.producto = nombreProducto;
         this.precio = precioProducto;
         this.unidades = unidadesProducto
@@ -110,8 +110,8 @@ class Compras{
 class Sistema {
     constructor() {
         this.usuarios = [
-            new Usuarios("lucas@gmail", "Lucas", "lucasbenta", "4456-6765-8409-1010", "Lucas0000", "admin", 50000),
-            new Usuarios("maria@gmail", "Maria", "mariaadu", "3267-8902-5986-1232", "Maria0000", "cliente", 300000)
+            new Usuario("lucas@gmail", "Lucas", "lucasbenta", "4456-6765-8409-1010", "Lucas0000", "admin", 50000),
+            new Usuario("maria@gmail", "Maria", "mariaadu", "3267-8902-5986-1232", "Maria0000", "cliente", 300000)
         ];
 
         this.productos = [
@@ -124,7 +124,7 @@ class Sistema {
     }
 
     agregarUsuario(mail, nombre, usuario, tarjetaCredito, pass, tipo, saldo) {
-        let objUsuario = new Usuarios(mail, nombre, usuario, tarjetaCredito, pass, tipo, saldo);
+        let objUsuario = new Usuario(mail, nombre, usuario, tarjetaCredito, pass, tipo, saldo);
         this.usuarios.push(objUsuario);
     }
 }
@@ -193,7 +193,7 @@ function Registrar() {
     if(verificarNombreYapellido(nombreInput)) {
         if(VerificarPass(passInput) === "OK") {
             sistema.agregarUsuario(mailInput, nombreInput, usernameInput, tarjetaInput, passInput, "cliente", saldoInicialDeUsuarioNuevo);
-            // new Usuarios (nombreIng, edadIng, nacionalidadIng);
+            // new Usuario (nombreIng, edadIng, nacionalidadIng);
             // Sistema.push(usuarios);
             // console.log();
             
@@ -288,6 +288,7 @@ function Ingresar() {
             console.log("Usuario encontrado");
             encontrado = true;
             if(passInput === sistema.usuarios[i].contrasena) {
+      
                 // bien
                 ExitoAlIniciarSesion(sistema.usuarios[i].tipoUsuario, sistema.usuarios[i].nombre, sistema.usuarios[i].saldo)
                 break;
@@ -408,9 +409,37 @@ function CerrarSesion() {
 }
 
 
+function CrearCompra(){
+    let campoUnidades = document.querySelector("campoUno").value;
+    
+    AgregarCompra(idProducto, campoUnidades);
+}
+
 
 // tomar pedidos y agregarlos al historial
 
+function AgregarCompra(idProducto, unidadesProducto) {
+    // Buscar el producto con el id dado en el array de productos
+    let productoAux = null;
+    for (let i = 0; i < this.productos.length; i++) {
+        if (this.productos[i].id === idProducto) {
+            productoAux = this.productos[i];
+        }
+    }
+
+    if (productoEncontrado) {
+        // El producto fue encontrado, crea una nueva instancia de Compras
+        let compra = new Compra(usuarioActivo, productoAux.nombre, productoAux.precio, unidadesProducto);
+        // Almacena la compra en la lista de pedidos que esta en sistema
+        this.pedidos.push(compra);
+
+        console.log("Compra agregada al sistema:", compra);
+    } else {
+        console.log("No se encontró un producto con el id especificado.");
+    }
+}
+
+document.querySelector("#btnCompra").addEventListener("click", CrearCompra);
 
 
 
