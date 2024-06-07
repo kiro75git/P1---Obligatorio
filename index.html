@@ -19,6 +19,9 @@
                 <li id="btnSectCatalogo" class="elementoOcultable cliente admin">
                     <a>Catálogo</a>
                 </li>
+                <li id="btnSectAdministracionDeInventario" class="elementoOcultable admin">
+                    <a>Inventario</a>
+                </li>
                 <li id="btnSectPedidos" class="elementoOcultable admin">
                     <a>Pedidos</a>
                 </li>
@@ -77,6 +80,28 @@
         <section class="seccion" id="sectPedidos">
 
             <h1> PEDIDOS / HISTORIAL </h1>
+        </section>
+
+        <section class="seccion" id="sectAdministracionDeInventario">
+            <section id="seccionAdminInventarioJS">
+            <div style="display: flex;">
+                <select id="slcProductoAdministrar"></select>
+                <label for="slcParametroACambiar" class="invLabel"> Parámetro que desea cambiar: </label>
+                <select id="slcParametroACambiar">
+                    <option value="nombre">Nombre</option>
+                    <option value="descripcion">Descripcion</option>
+                    <option value="activo">Activo</option>
+                    <option value="precio">Precio</option>
+                    <option value="imagen">Imagen</option>
+                    <option value="stock">Stock</option>
+                    <option value="descuento">Descuento</option>
+                </select>
+                <section id="parametroACambiarSection" style="display: flex;">
+                </section>
+            </div>
+            </section>
+            <p id="mostrarInfoProducto"></p>
+            <p id="mensajeDeExitoErrorInventario"></p>
         </section>
 
     </main>

@@ -148,6 +148,11 @@ label {
   font-size: 13px;
 }
 
+.invLabel {
+  font-size: medium;
+  margin: auto 0;
+}
+
 /* Estilos de los inputs */
 input,
 textarea,
@@ -245,4 +250,8 @@ footer a {
     align-items: center;
     box-sizing: border-box;
     gap: 10px;
+}
+
+#mostrarInfoProducto {
+  border: #002e4a 2px solid;
 }

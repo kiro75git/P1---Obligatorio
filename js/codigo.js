@@ -23,9 +23,11 @@ function cambiarSeccion(nuevaSeccion) {
     document.querySelector("#" + nuevaSeccion).style.display = "block";
     if(nuevaSeccion === "sectSesion") {
         CerrarSesion();
-    }
-    if(nuevaSeccion === "sectCatalogo") {
+    }else if(nuevaSeccion === "sectCatalogo") {
         ActualizarCatalogo();
+    }else if(nuevaSeccion === "sectAdministracionDeInventario") {
+        console.log("inventario");
+        ActualizarInventario();
     }
 }
 
@@ -160,19 +162,15 @@ function ActualizarCatalogo() {
         document.querySelector("#seccionCargaProductosJS").innerHTML += `
             <article class="producto ${visibDelProd}">
                     <figure>
+                        <h5 class="${mensajeInactivo}"> EL PRODUCTO ESTA INACTIVO, NO ES VISIBLE PARA LOS CLIENTES </h5>
                         <img src=${productoActual.imagen} alt=${productoActual.nombre}>
                         <figcaption>
                             <h4>${productoActual.nombre}</h4>
                             <p>${productoActual.descripcion}</p>
                             <h5>${productoActual.precio}</h5>
-                            <h5 class="${mensajeInactivo}"> EL PRODUCTO ESTA INACTIVO </h5>
                             <div class="comprar">
                                 <input type="button" id="btnCompra${idDelProd}" value="Comprar">
-                                <form class="opcionesAdmin visibilidadVariable admin">
-                                    <input type="button" id="btnAñadirStock${idDelProd}" value="Añadir Stock">
-                                    <input type="number" id="cantStock${idDelProd}" placeholder="ingrese stock (max10)">
-                                </form>
-                                <select id="slcUnidades">
+                                <select id="slcUnidades${idDelProd}">
                                     ${options}
                                 </select>
                             </div>
@@ -409,52 +407,166 @@ function CerrarSesion() {
     document.querySelector("#infoUsuario").style.display = "none";
 }
 
+
+
 // tomar pedidos y agregarlos al historial
 
 
-     function AgregarCompraYagregarHistorial(){
-        //bucle para encontrar id de producto deseado
-        for(let y = 0; y < Stock.length; y++){
-            let idProductoDeseado = this.id[i];
 
-        }
 
-        //bucle para realizar pedido
 
-        if(idProductoDeseado === 1){
-            for (let i = 0; i < productos.length; i++){
-                let producto = this.productos[i];
-                let nuevaCompra = new Compras(producto.nombre, producto.precio, unidades);
-                pedidos.push(nuevaCompra);
-                console.log(`Compra agregada: ${unidades} unidades de ${producto.nombre} a $${producto.precio} cada una.`);
-                 return; 
-             }
-        } else if(idProductoDeseado === 2){
-            for (let i = 0; i < productos.length; i++){
-                let producto = this.productos[i];
-                let nuevaCompra = new Compras(producto.nombre, producto.precio, unidades);
-                pedidos.push(nuevaCompra);
-                console.log(`Compra agregada: ${unidades} unidades de ${producto.nombre} a $${producto.precio} cada una.`);
-                 return; 
-             }
-        } else {
-            for (let i = 0; i < productos.length; i++){
-                let producto = this.productos[i];
-                let nuevaCompra = new Compras(producto.nombre, producto.precio, unidades);
-                pedidos.push(nuevaCompra);
-                console.log(`Compra agregada: ${unidades} unidades de ${producto.nombre} a $${producto.precio} cada una.`);
-                 return; 
-             }
-        }
-        
+// function AgregarCompraYagregarHistorial(){
+//     //bucle para encontrar id de producto deseado
+//     for(let y = 0; y < Stock.length; y++){
+//         let idProductoDeseado = this.id[i];
 
-         let historialCompras;
+//     //bucle para realizar pedido
 
-         historialCompras += Compras;
-         console.log(historialCompras);
- }
-
-        
+//     if(idProductoDeseado === 1){
+//         for (let i = 0; i < productos.length; i++){
+//             let producto = this.productos[i];
+//             if(producto.id === 1){
+//                 let nuevaCompra = new Compras(producto.nombre, producto.precio, unidades);
+//             pedidos.push(nuevaCompra);
+//             console.log(`Compra agregada: ${unidades} unidades de ${producto.nombre} a $${producto.precio} cada una.`);
+//                 return; 
+//             }
+//             }
+//     } else if(idProductoDeseado === 2){
+//         for (let i = 0; i < productos.length; i++){
+//             let producto = this.productos[i];
+//             if(producto.id === 2){
+//                 let nuevaCompra = new Compras(producto.nombre, producto.precio, unidades);
+//             pedidos.push(nuevaCompra);
+//             console.log(`Compra agregada: ${unidades} unidades de ${producto.nombre} a $${producto.precio} cada una.`);
+//                 return; 
+//             }
+//             }
+//     } else {
+//         for (let i = 0; i < productos.length; i++){
+//             let producto = this.productos[i];
+//             if(producto.id === 3){
+//                 let nuevaCompra = new Compras(producto.nombre, producto.precio, unidades);
+//             pedidos.push(nuevaCompra);
+//             console.log(`Compra agregada: ${unidades} unidades de ${producto.nombre} a $${producto.precio} cada una.`);
+//                 return; 
+//             }
+//         }
+//     }
     
+// }
+// }
 
-    
+// SECCION DE ADMIN DE INVENTARIO
+        
+function ActualizarInventario() {
+    let options = ``;
+    for(let i = 0; i < sistema.productos.length; i++) {
+        options += `<option value="${i}">${sistema.productos[i].nombre}</option>`;
+    }
+    document.querySelector("#slcProductoAdministrar").innerHTML = `${options}`;
+    mostrarElementosOcultos(tipoDeSesion);
+}
+
+document.querySelector("#slcProductoAdministrar").addEventListener("click", MostrarInformacionProdcutoInventario);
+
+function MostrarInformacionProdcutoInventario() {
+    let IDSeleccionado = Number(document.querySelector("#slcProductoAdministrar").value) + 1;
+    let ProductoSeleccionado = undefined;
+    for(let i = 0; i < sistema.productos.length; i++) {
+        if(IDSeleccionado === sistema.productos[i].id) {
+            ProductoSeleccionado = sistema.productos[i];
+            break;
+        }
+    }
+    if(ProductoSeleccionado === undefined) {
+        document.querySelector("#mostrarInfoProducto").innerHTML = `Error al conseguir la información del producto`;
+    }else {
+        document.querySelector("#mostrarInfoProducto").innerHTML = `Nombre: ${ProductoSeleccionado.nombre}<br>
+                                                                    Descripción: ${ProductoSeleccionado.descripcion}<br>
+                                                                    Precio: ${ProductoSeleccionado.precio}<br>
+                                                                    Descuento: ${ProductoSeleccionado.oferta}<br>
+                                                                    Activo: ${ProductoSeleccionado.activo}<br>
+                                                                    Stock:  ${ProductoSeleccionado.stock}<br>
+                                                                    Imagen (link): ${ProductoSeleccionado.imagen}<br>
+                                                                    ID:${ProductoSeleccionado.id}`
+    }
+}
+
+document.querySelector("#slcParametroACambiar").addEventListener("click", DesplegarMenuParaModificarInventario);
+
+function DesplegarMenuParaModificarInventario() {
+    let parametroACambiar = String(document.querySelector("#slcParametroACambiar").value);
+    if(parametroACambiar === "activo" || parametroACambiar === "descuento") {
+        document.querySelector("#parametroACambiarSection").innerHTML = `<label for="parametroACambiar" class="invLabel"> Seleccione el nuevo valor </label><input type="checkbox" id="parametroACambiar">`;
+    }else if(parametroACambiar === "precio" || parametroACambiar === "stock") {
+        document.querySelector("#parametroACambiarSection").innerHTML = `<label for="parametroACambiar" class="invLabel"> Ingrese el nuevo valor </label><input type="number" id="parametroACambiar">`;
+    }else if(parametroACambiar === "nombre" || parametroACambiar === "descripcion" || parametroACambiar === "imagen") {
+        document.querySelector("#parametroACambiarSection").innerHTML = `<label for="parametroACambiar" class="invLabel"> Ingrese ${parametroACambiar} deseado/a </label><input type="text" id="parametroACambiar">`;
+    }
+    document.querySelector("#parametroACambiarSection").innerHTML += `<input type="button" value="Realizar cambio" id="btnRealizarCambiosEnInventario">`
+    document.querySelector("#btnRealizarCambiosEnInventario").addEventListener("click", RealizarCambioEnInventario);
+}
+
+
+function RealizarCambioEnInventario() {
+    let IDProductoElegido = Number(document.querySelector("#slcProductoAdministrar").value) + 1;
+    let parametroACambiarProductoElegido = String(document.querySelector("#slcParametroACambiar").value);
+    let ProductoSeleccionado = undefined;
+
+    let mensajeAMostrar = "";
+    for(let i = 0; i < sistema.productos.length; i++) {
+        if(IDProductoElegido === sistema.productos[i].id) {
+            ProductoSeleccionado = sistema.productos[i];
+            break;
+        }
+    }
+    let ParametroDentroDelProducto = undefined;
+    if(ProductoSeleccionado !== undefined) {
+        let nuevoValor = document.querySelector("#parametroACambiar").value;
+        if(parametroACambiarProductoElegido !== undefined) {
+            if(nuevoValor === "on") {
+                nuevoValor = document.querySelector("#parametroACambiar").checked;
+            }
+        }
+        switch (parametroACambiarProductoElegido) {
+            case "nombre":
+                ParametroDentroDelProducto = ProductoSeleccionado.nombre;
+                ProductoSeleccionado.nombre = nuevoValor;
+                break;
+            case "descripcion":
+                ParametroDentroDelProducto = ProductoSeleccionado.descripcion;
+                ProductoSeleccionado.descripcion = nuevoValor;
+                break;
+            case "precio":
+                ParametroDentroDelProducto = ProductoSeleccionado.precio;
+                ProductoSeleccionado.precio = nuevoValor;
+                break;
+            case "descuento":
+                ParametroDentroDelProducto = ProductoSeleccionado.oferta;
+                ProductoSeleccionado.descuento = nuevoValor;
+                break;
+            case "activo":
+                ParametroDentroDelProducto = ProductoSeleccionado.activo;
+                ProductoSeleccionado.activo = nuevoValor;
+                break;
+            case "stock":
+                ParametroDentroDelProducto = ProductoSeleccionado.stock;
+                ProductoSeleccionado.stock = nuevoValor;
+                break;
+            case "imagen":
+                ParametroDentroDelProducto = ProductoSeleccionado.imagen;
+                ProductoSeleccionado.imagen = nuevoValor;
+                break;
+            default:
+                mensajeAMostrar = "Ocurrió un error determinando que atributo desea cambiar.";
+                break;
+        }
+        mensajeAMostrar = `Se ha realizado el cambio de ${parametroACambiarProductoElegido} dentro de ${ProductoSeleccionado.nombre}: ${ParametroDentroDelProducto} ha pasado a ser ${nuevoValor}`;
+        
+    }else {
+        mensajeAMostrar = "Ocurrió un error determinando que producto desea cambiar.";
+    }
+    document.querySelector("#mensajeDeExitoErrorInventario").innerHTML = mensajeAMostrar;
+    MostrarInformacionProdcutoInventario();
+}
