@@ -72,11 +72,12 @@ mostrarElementosOcultos(tipoDeSesion);
 //usuarios precargados
 
 class Usuario {
-    constructor(correoIng, nombreIng, usernameIng, tarjetaIng, contrasenaIng,  tipoUsuarioIng, saldoIng) {
+    constructor(correoIng, nombreIng, usernameIng, tarjetaIng, cvcIng, contrasenaIng,  tipoUsuarioIng, saldoIng) {
         this.nombre = nombreIng;
         this.correo = correoIng;
         this.username = usernameIng;
         this.tarjeta = tarjetaIng;
+        this.cvc = cvcIng;
         this.contrasena = contrasenaIng;
         this.tipoUsuario = tipoUsuarioIng;
         this.saldo = saldoIng;
@@ -110,8 +111,9 @@ class Compra{
 class Sistema {
     constructor() {
         this.usuarios = [
-            new Usuario("lucas@gmail", "Lucas", "lucasbenta", "4456-6765-8409-1010", "Lucas0000", "admin", 50000),
-            new Usuario("maria@gmail", "Maria", "mariaadu", "3267-8902-5986-1232", "Maria0000", "cliente", 300000)
+            new Usuario("santi@gmail.com", "Santiago", "santiszucs", "7754-8901-1011-6709", "345", "Santi0000", "admin", 50000),
+            new Usuario("lucas@gmail.com", "Lucas", "lucasbenta", "4456-6765-8409-1010", "765", "Lucas0000", "admin", 50000),
+            new Usuario("maria@gmail.com", "Maria", "mariaadu", "3267-8902-5986-1232", "911", "Maria0000", "cliente", 300000)
         ];
 
         this.productos = [
@@ -187,12 +189,14 @@ function Registrar() {
     let passInput = String(document.querySelector("#ingresoContra").value);
     let usernameInput = String(document.querySelector("#ingresoUsername").value);
     let tarjetaInput = String(document.querySelector("#ingresoTarjeta").value);
+    let codigoCVC = document.querySelector("#ingresoCVC").value;
     let nombreInput = String(document.querySelector("#ingresoNombre").value);
 
-    
+    VerificarCVC(codigoCVC);
+
     if(verificarNombreYapellido(nombreInput)) {
         if(VerificarPass(passInput) === "OK") {
-            sistema.agregarUsuario(mailInput, nombreInput, usernameInput, tarjetaInput, passInput, "cliente", saldoInicialDeUsuarioNuevo);
+            sistema.agregarUsuario(mailInput, nombreInput, usernameInput, tarjetaInput, codigoCVC, passInput, "cliente", saldoInicialDeUsuarioNuevo);
             // new Usuario (nombreIng, edadIng, nacionalidadIng);
             // Sistema.push(usuarios);
             // console.log();
@@ -370,6 +374,29 @@ function validarTarjeta(nroTarjeta) {
     }
 }
 
+//verificar codigo de seguridad (CVC)
+
+function VerificarCVC(codigoCVC){
+
+    codigoValido = false;
+
+    if(codigoCVC.length === 3){
+        for (let i = 0; i < codigoCVC.length; i++){
+            let valorCaracter = codigoCVC.charAt(i);
+
+            if(valorCaracter >= "0" && valorCaracter <= "9"){
+
+                codigoValido = true;
+
+
+            } else {
+                //error
+            }
+        }
+    } 
+    return codigoValido;
+}
+
 // INICIO DE SESION EXITOSO
 
 function ExitoAlIniciarSesion(sesionDelUsuario, nombreDelUsuario, saldoDelUsuario) {
@@ -420,10 +447,10 @@ function CrearCompra(){
 
 function AgregarCompra(idProducto, unidadesProducto) {
     // Buscar el producto con el id dado en el array de productos
-    let productoAux = null;
-    for (let i = 0; i < this.productos.length; i++) {
+    let productoAux = null;  //variable nula
+    for (let i = 0; i < this.productos.length; i++) {  //recorrer los productos
         if (this.productos[i].id === idProducto) {
-            productoAux = this.productos[i];
+            productoAux = this.productos[i];     //la variable toma el valor de los productos
         }
     }
 
@@ -439,7 +466,6 @@ function AgregarCompra(idProducto, unidadesProducto) {
     }
 }
 
-document.querySelector("#btnCompra").addEventListener("click", CrearCompra);
 
 
 
