@@ -102,7 +102,6 @@ function ActualizarCatalogo() {
                         <img src=${productoActual.imagen} alt=${productoActual.nombre}>
                         <figcaption>
                             <div class="comprar">
-                                <label for="radios">Elegir</label>
                                 <div id="radios">
                                     ${seleccionProd}
                                 </div>
@@ -128,6 +127,8 @@ function ActualizarCatalogo() {
     }
     mostrarElementosOcultos(tipoDeSesion);
 }
+
+// <label for="radios">Elegir</label>
 
 function Registrar() {
     let mailInput = String(document.querySelector("#ingresoMail").value);
@@ -403,13 +404,13 @@ function CrearCompra(){
 function AgregarCompra(idProducto, unidadesProducto) {
     // Buscar el producto con el id dado en el array de productos
     let productoAux = null;  //variable nula
-    for (let i = 0; i < this.productos.length; i++) {  //recorrer los productos
-        if (this.productos[i].id === idProducto) {
-            productoAux = this.productos[i];     //la variable toma el valor de los productos
+    for (let i = 0; i < sistema.productos.length; i++) {  //recorrer los productos
+        if (sistema.productos[i].id === idProducto) {
+            productoAux = sistema.productos[i];     //la variable toma el valor de los productos
         }
     }
 
-    if (productoEncontrado) {
+    if (productoAux != null) {
         // El producto fue encontrado, crea una nueva instancia de Compras
         let compra = new Compra(usuarioActivo, productoAux.nombre, productoAux.precio, unidadesProducto);
         // Almacena la compra en la lista de pedidos que esta en sistema
@@ -420,52 +421,6 @@ function AgregarCompra(idProducto, unidadesProducto) {
         console.log("No se encontró un producto con el id especificado.");
     }
 }
-
-
-
-
-
-// function AgregarCompraYagregarHistorial(){
-//     //bucle para encontrar id de producto deseado
-//     for(let y = 0; y < Stock.length; y++){
-//         let idProductoDeseado = this.id[i];
-
-//     //bucle para realizar pedido
-
-//     if(idProductoDeseado === 1){
-//         for (let i = 0; i < productos.length; i++){
-//             let producto = this.productos[i];
-//             if(producto.id === 1){
-//                 let nuevaCompra = new Compras(producto.nombre, producto.precio, unidades);
-//             pedidos.push(nuevaCompra);
-//             console.log(`Compra agregada: ${unidades} unidades de ${producto.nombre} a $${producto.precio} cada una.`);
-//                 return; 
-//             }
-//             }
-//     } else if(idProductoDeseado === 2){
-//         for (let i = 0; i < productos.length; i++){
-//             let producto = this.productos[i];
-//             if(producto.id === 2){
-//                 let nuevaCompra = new Compras(producto.nombre, producto.precio, unidades);
-//             pedidos.push(nuevaCompra);
-//             console.log(`Compra agregada: ${unidades} unidades de ${producto.nombre} a $${producto.precio} cada una.`);
-//                 return; 
-//             }
-//             }
-//     } else {
-//         for (let i = 0; i < productos.length; i++){
-//             let producto = this.productos[i];
-//             if(producto.id === 3){
-//                 let nuevaCompra = new Compras(producto.nombre, producto.precio, unidades);
-//             pedidos.push(nuevaCompra);
-//             console.log(`Compra agregada: ${unidades} unidades de ${producto.nombre} a $${producto.precio} cada una.`);
-//                 return; 
-//             }
-//         }
-//     }
-    
-// }
-// }
 
 // SECCION DE ADMIN DE INVENTARIO
         

@@ -53,6 +53,8 @@ class Sistema {
         ]
 
         this.pedidos = []
+
+        
     }
 
     agregarUsuario(mail, nombre, usuario, tarjetaCredito, pass, tipo, saldo) {
