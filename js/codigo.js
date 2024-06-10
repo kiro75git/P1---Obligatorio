@@ -67,70 +67,6 @@ function mostrarElementosOcultos(tipoUsuario) {
 
 mostrarElementosOcultos(tipoDeSesion);
 
-
-
-//usuarios precargados
-
-class Usuario {
-    constructor(correoIng, nombreIng, usernameIng, tarjetaIng, cvcIng, contrasenaIng,  tipoUsuarioIng, saldoIng) {
-        this.nombre = nombreIng;
-        this.correo = correoIng;
-        this.username = usernameIng;
-        this.tarjeta = tarjetaIng;
-        this.cvc = cvcIng;
-        this.contrasena = contrasenaIng;
-        this.tipoUsuario = tipoUsuarioIng;
-        this.saldo = saldoIng;
-        
-    }
-}
-
-class Stock {
-    constructor(idProducto, nombreProducto, descripcionProducto, imagenProducto, precioProducto, ofertaProducto, activoProducto, stockProducto) {
-        this.id = idProducto;
-        this.nombre = nombreProducto;
-        this.descripcion = descripcionProducto;
-        this.imagen = imagenProducto;
-        this.precio = precioProducto;
-        this.oferta = ofertaProducto;
-        this.activo = activoProducto;
-        this.stock = stockProducto;
-    }
-}
-
-class Compra{
-    constructor(usuarioPedido, nombreProducto, precioProducto, unidadesProducto){
-        this.Usuario = usuarioPedido;
-        this.producto = nombreProducto;
-        this.precio = precioProducto;
-        this.unidades = unidadesProducto
-    }
-}
-
-
-class Sistema {
-    constructor() {
-        this.usuarios = [
-            new Usuario("santi@gmail.com", "Santiago", "santiszucs", "7754-8901-1011-6709", "345", "Santi0000", "admin", 50000),
-            new Usuario("lucas@gmail.com", "Lucas", "lucasbenta", "4456-6765-8409-1010", "765", "Lucas0000", "admin", 50000),
-            new Usuario("maria@gmail.com", "Maria", "mariaadu", "3267-8902-5986-1232", "911", "Maria0000", "cliente", 300000)
-        ];
-
-        this.productos = [
-            new Stock(1, "Campera Nike", "Campera marca Nike, deportiva negra", "https://f.fcdn.app/imgs/63379c/www.globalsports.com.uy/gls/88f1/original/catalogo/NKBV2648-010-1/1500-1500/campera-nike-sportswear-club-black.jpg", 3200, false, false, 30),
-            new Stock(2, "Campera Adidas", "Campera marca Adidas superstar, deportiva negra", "https://f.fcdn.app/imgs/323a82/www.zooko.com.uy/zoo/37bb/original/catalogo/ADCW1256-1032-1/460x460/campera-adidas-superstar-tt-black.jpg", 2900, false, true, 40),
-            new Stock(3, "Campera Under Armour", "Campera de nylon marca Under Armour negra", "https://f.fcdn.app/imgs/bd240e/menpi.uy/menpuy/3975/original/catalogo/1380868001-0-1/1500-1500/campera-under-armour-moda-hombre-strm-ins-run-hbd-jkt-black-s-c.jpg", 4000, false, true, 30)
-        ]
-
-        this.pedidos = []
-    }
-
-    agregarUsuario(mail, nombre, usuario, tarjetaCredito, pass, tipo, saldo) {
-        let objUsuario = new Usuario(mail, nombre, usuario, tarjetaCredito, pass, tipo, saldo);
-        this.usuarios.push(objUsuario);
-    }
-}
-
 //registro de usuarios
 
 let sistema = new Sistema()
@@ -174,11 +110,7 @@ function ActualizarCatalogo() {
                                     ${options}
                                 </select>
                             </div>
-                            <div style="display:flex;">
-                                <h4>${productoActual.nombre}</h4>
-                                <h5>${productoActual.precio}</h5>
-                            </div>
-                            
+                            <h4>${productoActual.nombre} - ${productoActual.precio}</h4>
                             <p>${productoActual.descripcion}</p>
                             
                         </figcaption>
@@ -445,11 +377,24 @@ function CerrarSesion() {
     document.querySelector("#infoUsuario").style.display = "none";
 }
 
+//boton para realizar pedido
+
+document.querySelector("#btnComprar").addEventListener("click", CrearCompra);
 
 function CrearCompra(){
-    let campoUnidades = document.querySelector("campoUno").value;
+    //toma de datos 
+    let campoUnidades = document.querySelector(".selectUnidades").value; //cantidad Unidades
+    let selectProd = document.querySelectorAll(`input[name="slcProducto"]`); //Producto Elegido con input radio
+    let productoDeseado;
+    for(let i = 0; i < selectProd.length; i++) {
+        
+        if(selectProd[i].checked){
+            productoDeseado = selectProd[i];
+        }
+    }
     
-    AgregarCompra(idProducto, campoUnidades);
+    
+    AgregarCompra(productoDeseado, campoUnidades);
 }
 
 
@@ -641,7 +586,37 @@ function RealizarCambioEnInventario() {
 document.querySelector("#btnCrearNuevoProducto").addEventListener("click", ActividadBotonProducto);
 
 function ActividadBotonProducto() {
-    
+    if(String(document.querySelector("#btnCrearNuevoProducto").value) === "Deseo crear un nuevo producto") {
+        document.querySelector("#formCrearProducto").innerHTML = `<label for="inpNombreNuevoProducto">Nombre: </label><input type="text" id="inpNombreNuevoProducto">
+                    <label for="inpDescNuevoProducto">Descripcion: </label><input type="text" id="inpDescNuevoProducto">                               
+                    <label for="inpNombreNuevoProducto">Precio: </label><input type="number" id="inpPrecioNuevoProducto">
+                    <label for="inpDescuentoNuevoProducto">Se encuentra de descuento: </label><input type="checkbox" id="inpDescuentoNuevoProducto">
+                    <label for="inpActivoNuevoProducto">Se encuentra activo: </label><input type="checkbox" id="inpActivoNuevoProducto">
+                    <label for="inpStockNuevoProducto">Stock inicial: </label><input type="number" id="inpStockNuevoProducto">
+                    <label for="inpImagenNuevoProducto">Imagen (URL): </label><input type="text" id="inpImagenNuevoProducto">`;
+        document.querySelector("#btnCrearNuevoProducto").value = "Crear Producto";
+    }else if(String(document.querySelector("#btnCrearNuevoProducto").value) === "Crear Producto") {
+        let nombreNuevo = document.querySelector("#inpNombreNuevoProducto").value;
+        let descNueva = document.querySelector("#inpDescNuevoProducto").value;
+        let precioNuevo = document.querySelector("#inpPrecioNuevoProducto").value;
+        let descuentoNuevo = document.querySelector("#inpDescuentoNuevoProducto").checked;
+        let activoNuevo = document.querySelector("#inpActivoNuevoProducto").checked;
+        let stockNuevo = document.querySelector("#inpStockNuevoProducto").value;
+        let imagenNueva = document.querySelector("#inpImagenNuevoProducto").value;
+
+        if(nombreNuevo !== "" && descNueva !== "" && precioNuevo !== 0 && imagenNueva !== "" && stockNuevo >= 0) {
+            let idNuevo = Number(sistema.productos.length) + 1;
+            let productoNuevo = new Stock(idNuevo, nombreNuevo, descNueva, imagenNueva, precioNuevo, descuentoNuevo, activoNuevo, stockNuevo);
+            sistema.productos.push(productoNuevo);
+            document.querySelector("#pControlCrearProducto").innerHTML = `El producto se creó exitosamente, se le ha proporcionado el id: ${idNuevo}`;
+
+        }else {
+            document.querySelector("#pControlCrearProducto").innerHTML = "Ocurrió un error procesando los datos ingresados";
+        }
+        document.querySelector("#btnCrearNuevoProducto").value = "Deseo crear un nuevo producto";
+        // limpiar 
+        document.querySelector("#formCrearProducto").innerHTML = "";
+    }
 }
 
 //seccion Historial y pedidos
