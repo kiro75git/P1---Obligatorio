@@ -83,6 +83,21 @@
         <section class="seccion" id="sectPedidos">
 
             <h1> PEDIDOS / HISTORIAL </h1>
+
+            <h2>PEDIDOS</h2>
+
+            <table>
+                <tr>
+                    <td>Usuario</td>
+                    <td>Producto</td>
+                    <td>Unidades</td>
+                    <td>Precio</td>
+                    <td></td>
+                </tr>
+            </table> <br> <br>
+
+            <!-- <input type="button" id="btnHistorial" value="Ver historial"> -->
+
         </section>
 
         <section class="seccion" id="sectAdministracionDeInventario">
@@ -105,6 +120,19 @@
             </section>
             <p id="mostrarInfoProducto"></p>
             <p id="mensajeDeExitoErrorInventario"></p>
+            <br>
+            <section id="creacionNuevoProductoJS">
+                <form style="display: none;" id="formCrearProducto">
+                    <label for="inpNombreNuevoProducto">Nombre: </label><input type="text" id="inpNombreNuevoProducto">
+                    <label for="inpDescNuevoProducto">Descripcion: </label><input type="text" id="inpDescNuevoProducto">                               
+                    <label for="inpNombreNuevoProducto">Precio: </label><input type="number" id="inpPrecioNuevoProducto">
+                    <label for="inpDescuentoNuevoProducto">Se encuentra de descuento: </label><input type="checkbox" id="inpDescuentoNuevoProducto">
+                    <label for="inpActivoNuevoProducto">Se encuentra activo: </label><input type="checkbox" id="inpActivoNuevoProducto">
+                    <label for="inpStockNuevoProducto">Stock inicial: </label><input type="number" id="inpStockNuevoProducto">
+                    <label for="inpImagenNuevoProducto">Imagen (URL): </label><input type="text" id="inpImagenNuevoProducto">    
+                </form>
+                <input type="button" value="Deseo crear un nuevo producto" id="btnCrearNuevoProducto">
+            </section>
         </section>
 
     </main>

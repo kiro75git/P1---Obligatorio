@@ -137,49 +137,62 @@ let sistema = new Sistema()
 
 function ActualizarCatalogo() {
     document.querySelector("#seccionCargaProductosJS").innerHTML = "";
+    let contadorInactivos = 0;
+    let mensajeInactivos = "";
     for(let i = 0; i < sistema.productos.length; i++) {
         let productoActual = sistema.productos[i];
         let stockDelProd = "";
-        let visibDelProd = "visibilidadVariable admin";
-        let mensajeInactivo = "visibilidadVariable";
         let idDelProd = productoActual.id;
         if(productoActual.stock > 0) {
             stockDelProd = String(productoActual.stock);
         }else{
             stockDelProd = "SIN STOCK!";
         }
-        if(productoActual.activo) {
-            visibDelProd = "visibilidadVariable admin cliente"
-        }else {
-            mensajeInactivo = "visibilidadVariable admin";
-        }
 
         let options = "";
         for(let i = 1; i <= stockDelProd; i++) {
             options += `<option value="${i}">${i}</option>`;
         }
+
+         
+        let seleccionProd = `<input type="radio" id="prod${idDelProd}" name="slcProducto" value="${idDelProd}">`;
+        
         
         // Generacion del producto en el catálogo
-
-        document.querySelector("#seccionCargaProductosJS").innerHTML += `
-            <article class="producto ${visibDelProd}">
+        if(productoActual.activo) {
+            document.querySelector("#seccionCargaProductosJS").innerHTML += `
+            <article class="producto">
                     <figure>
-                        <h5 class="${mensajeInactivo}"> EL PRODUCTO ESTA INACTIVO, NO ES VISIBLE PARA LOS CLIENTES </h5>
                         <img src=${productoActual.imagen} alt=${productoActual.nombre}>
                         <figcaption>
-                            <h4>${productoActual.nombre}</h4>
-                            <p>${productoActual.descripcion}</p>
-                            <h5>${productoActual.precio}</h5>
                             <div class="comprar">
-                                <input type="button" id="btnCompra${idDelProd}" value="Comprar">
-                                <select id="slcUnidades${idDelProd}">
+                                <label for="radios">Elegir</label>
+                                <div id="radios">
+                                    ${seleccionProd}
+                                </div>
+                                <select id="slcUnidades${idDelProd}" class="selectUnidades">
                                     ${options}
                                 </select>
                             </div>
+                            <div style="display:flex;">
+                                <h4>${productoActual.nombre}</h4>
+                                <h5>${productoActual.precio}</h5>
+                            </div>
+                            
+                            <p>${productoActual.descripcion}</p>
+                            
                         </figcaption>
                     </figure>
                 </article>
-        `
+            `
+        }else {
+            contadorInactivos += 1;
+            mensajeInactivos += `${productoActual.nombre}, `;
+        }
+
+    }
+    if(tipoDeSesion === "admin" && contadorInactivos > 0) {
+        alert(`Hay ${contadorInactivos} productos inactivos: ${mensajeInactivos}`);
     }
     mostrarElementosOcultos(tipoDeSesion);
 }
@@ -197,9 +210,6 @@ function Registrar() {
     if(verificarNombreYapellido(nombreInput)) {
         if(VerificarPass(passInput) === "OK") {
             sistema.agregarUsuario(mailInput, nombreInput, usernameInput, tarjetaInput, codigoCVC, passInput, "cliente", saldoInicialDeUsuarioNuevo);
-            // new Usuario (nombreIng, edadIng, nacionalidadIng);
-            // Sistema.push(usuarios);
-            // console.log();
             
             document.querySelector("#pError").innerHTML = `Se registró correctamente! Ahora inice sesión.`
             document.querySelector("#formRegistro").style.display = "none";
@@ -625,3 +635,26 @@ function RealizarCambioEnInventario() {
     document.querySelector("#mensajeDeExitoErrorInventario").innerHTML = mensajeAMostrar;
     MostrarInformacionProdcutoInventario();
 }
+
+//creacion productos
+
+document.querySelector("#btnCrearNuevoProducto").addEventListener("click", ActividadBotonProducto);
+
+function ActividadBotonProducto() {
+    
+}
+
+//seccion Historial y pedidos
+
+document.querySelector("#sectPedidos").innerHTML += `
+
+            <tr>
+               <td>Usuario</td>
+                <td>Producto</td>
+                <td>Unidades</td>
+                <td>Precio</td>
+                <td><input type="button" id="btnAprobar" value="Aprobar Pedido"></td>
+                </tr>
+`;
+
+

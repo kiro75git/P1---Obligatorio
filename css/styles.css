@@ -249,9 +249,33 @@ footer a {
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
-    gap: 10px;
+    gap: 5px;
+}
+
+.selectUnidades {
+  width: 5px;
 }
 
 #mostrarInfoProducto {
   border: #002e4a 2px solid;
+}
+
+#seccionCargaProductosJS {
+  display: grid;
+
+  grid-template-columns: repeat(3, 33%);
+  grid-template-rows: repeat();
+    
+  gap: 25px;
+}
+
+figcaption div h4,h5{
+  width: auto;
+  margin-top: 0;
+  margin: 0 auto;
+  padding: 0 5px;
+}
+
+input [type="radio"]{
+  margin: 0;
 }
