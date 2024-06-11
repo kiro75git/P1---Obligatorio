@@ -1,5 +1,5 @@
 // DEBUG //
-let saldoInicialDeUsuarioNuevo = 10000;
+let saldoInicialDeUsuarioNuevo = 3000;
 // DEBUG //
 
 let tipoDeSesion = 'cerrada';
@@ -12,7 +12,7 @@ function mostrarSeccion() {
     cambiarSeccion(idSeccion);
 }
 
-let elementosOcultables = document.querySelectorAll(".elementoOcultable");
+let elementosOcultables = document.querySelectorAll('.elementoOcultable');
 for (let i = 0; i < elementosOcultables.length; i++) {
     const eo = elementosOcultables[i];
     eo.addEventListener("click", mostrarSeccion);
@@ -28,9 +28,10 @@ function cambiarSeccion(nuevaSeccion) {
     }else if(nuevaSeccion === "sectAdministracionDeInventario") {
         console.log("inventario");
         ActualizarInventario();
+    }else if(nuevaSeccion === "sectPedidos") {
+        ActualizarPedidosYHistorial();
     }
 }
-
 cambiarSeccion("sectSesion");
 
 function ocultarSecciones() {
@@ -64,7 +65,6 @@ function mostrarElementosOcultos(tipoUsuario) {
         vvMostrar.style.display = "block";
     }
 }
-
 mostrarElementosOcultos(tipoDeSesion);
 
 //registro de usuarios
@@ -99,12 +99,10 @@ function ActualizarCatalogo() {
             document.querySelector("#seccionCargaProductosJS").innerHTML += `
             <article class="producto">
                     <figure>
-                        <img src=${productoActual.imagen} alt=${productoActual.nombre}>
+                        <img src="${productoActual.imagen}" alt="${productoActual.nombre}">
                         <figcaption>
                             <div class="comprar">
-                                <div id="radios">
-                                    ${seleccionProd}
-                                </div>
+                                <input type="button" value="Comprar" id="btnCompra${idDelProd}" class="button">
                                 <select id="slcUnidades${idDelProd}" class="selectUnidades">
                                     ${options}
                                 </select>
@@ -116,19 +114,29 @@ function ActualizarCatalogo() {
                     </figure>
                 </article>
             `
+
         }else {
             contadorInactivos += 1;
             mensajeInactivos += `${productoActual.nombre}, `;
         }
 
     }
+
+
+    // Proporciona funcionalidad a los botones de compra del catalogo mediante un evento atado al id del boton utilizado en la funcion auxiliar efectuarCompra
+    for(let i = 0; i < sistema.productos.length; i++) {
+        if(sistema.productos[i].activo) {
+            var identifInput = document.querySelector(`#btnCompra${i+1}`);
+            identifInput.addEventListener('click', efectuarCompra, false);
+            identifInput.idBotonComprar = identifInput.id;
+        }
+    }
+    
     if(tipoDeSesion === "admin" && contadorInactivos > 0) {
         alert(`Hay ${contadorInactivos} productos inactivos: ${mensajeInactivos}`);
     }
     mostrarElementosOcultos(tipoDeSesion);
 }
-
-// <label for="radios">Elegir</label>
 
 function Registrar() {
     let mailInput = String(document.querySelector("#ingresoMail").value);
@@ -157,188 +165,30 @@ function Registrar() {
         document.querySelector("#formRegistro").style.display = "block";
     }
 }
-
 document.querySelector("#btnRegistro").addEventListener("click", Registrar);
-
-//funcion para verificar contraseña
-function VerificarPass(pass) {
-    let error = "ninguno";
-    let password = pass;
-    let hasNum = false;
-    if(password.length >= 5) {
-            for(let i = 0; i < password.length; i++) {
-                    switch (password.charAt(i)) {
-                            case "0":
-                            case "1":
-                            case "2":
-                            case "3":
-                            case "4":
-                            case "5":
-                            case "6":
-                            case "7":
-                            case "8":
-                            case "9":
-                                    if(i === 0) {
-                                            error = "numeroinicio";
-                                    }
-                                    hasNum = true;
-                                    break;
-                            default:
-                                    break;
-                    }
-            }
-            if(!hasNum) {
-                    error = "sinnumero";
-            }
-            let minCount = 0;
-            let mayCount = 0;
-            for(let i = 0; i < password.length; i++) {
-                    if(password.charAt(i) === " ") {
-                            error = "espacio"
-                    }else if(password.charAt(i) === password.charAt(i).toUpperCase()) {
-                            mayCount++;
-                    }else if(password.charAt(i) === password.charAt(i).toLowerCase()) {
-                            minCount++;
-                    }
-            }
-            if(!(minCount > 0 && mayCount > 0)) {
-                    error = "mayusminus";
-            }
-            
-    }else {error = "longitud";}
-
-    let mensaje = "OK";
-
-    if(error === "longitud") {
-            mensaje = "Su contraseña debe tener al menos 5 caracteres";
-    }else if(error === "mayusminus") {
-            mensaje = "Su contraseña debe tener una mayúscula y una minúscula";
-    }else if(error === "numeroinicio") {
-            mensaje = "Su contraseña no puede comenzar por un número";
-    }else if(error === "sinnumero") {
-            mensaje = "Su contraseña debe tener al menos un número";
-    }else if(error === "espacio") {
-            mensaje = "Su contraseña no puede tener espacios en blanco";
-    }
-
-    return mensaje;
-}
 
 function Ingresar() {
     let passInput = String(document.querySelector("#ingresoContra").value);
     let usernameInput = String(document.querySelector("#ingresoUsername").value);
 
-    let encontrado = false;
-
     for(let i=0; i < sistema.usuarios.length; i++) {
         if(usernameInput === sistema.usuarios[i].username) {
             console.log("Usuario encontrado");
-            encontrado = true;
             if(passInput === sistema.usuarios[i].contrasena) {
       
                 // bien
-                ExitoAlIniciarSesion(sistema.usuarios[i].tipoUsuario, sistema.usuarios[i].nombre, sistema.usuarios[i].saldo)
+                ExitoAlIniciarSesion(sistema.usuarios[i].tipoUsuario, sistema.usuarios[i].username, sistema.usuarios[i].saldo)
                 break;
             }else{
                 // mal
-                document.querySelector("#pError").innerHTML = "Las credenciales no coinciden, intentelo denuevo"
+                document.querySelector("#pError").innerHTML = "Las credenciales no coinciden, intentelo denuevo";
             }
-        }  
+        }else{
+            document.querySelector("#pError").innerHTML = "Usuario no encontrado, intentelo denuevo";
+        }
     } 
 }
-
 document.querySelector("#btnInicioSesion").addEventListener("click", Ingresar);
-
-//verificar ingreso nombre y apellido
-function verificarNombreYapellido(nombreUsuario){
-    let verificarEspacio = false;
-    let hayEspacios = 0;
-    for(let i = 0; i < nombreUsuario.length; i++){
-        let valorCaracter = nombreUsuario.charAt(i);
-        
-        if(valorCaracter === " "){
-            hayEspacios++;
-        }
-    }
-    
-    if(hayEspacios > 0){
-        verificarEspacio = true;
-    } else {
-        document.querySelector("#pError").innerHTML = "Las credenciales no coinciden, intentelo denuevo"
-    }
-    
-    return verificarEspacio;
-}
-
-//verificar ingreso de tarjeta
-function validarTarjeta(nroTarjeta) {
-    //funcion para verificar tarjeta:
-
-    let contadorGuiones = 0;
-        
-    for(let r = 0; r < nroTarjeta.length; r++){
-        let caracterPos =  nroTarjeta.charAt(r);
-            
-        if(caracterPos === "-"){
-            contadorGuiones++;
-        }
-    }
-
-    if (contadorGuiones === 3){
-            let acumulador = 0;
-            let digitoVerificar = nroTarjeta.charAt(nroTarjeta.length - 1);
-            let dev = false;
-            let cont = 0;
-            for (let i = nroTarjeta.length - 2; i >= 0; i--) {
-                let valorAcumular = Number(nroTarjeta.charAt(i));
-                if (cont % 2 === 0) {
-                    let duplicado = Number(nroTarjeta.charAt(i)) * 2;
-                    if (duplicado >= 10) {
-                        let duplicadoStr = String(duplicado);
-                        let suma = Number(duplicadoStr.charAt(0)) + Number(duplicadoStr.charAt(1));
-                        valorAcumular = suma;
-                    } else {
-                        valorAcumular = duplicado;
-                    }
-                }
-                acumulador += valorAcumular;
-                cont++;
-            }
-            let multiplicado = acumulador * 9;
-            let multiplicadoStr = String(multiplicado);
-            let digitoVerificador = multiplicadoStr.charAt(multiplicadoStr.length - 1);
-            if (digitoVerificar === digitoVerificador) {
-                dev = true;
-            }
-            return dev;
-
-    }else {
-        document.querySelector("#pError").innerHTML = "ocurrió un error al ingresar los datos"
-    }
-}
-
-//verificar codigo de seguridad (CVC)
-
-function VerificarCVC(codigoCVC){
-
-    codigoValido = false;
-
-    if(codigoCVC.length === 3){
-        for (let i = 0; i < codigoCVC.length; i++){
-            let valorCaracter = codigoCVC.charAt(i);
-
-            if(valorCaracter >= "0" && valorCaracter <= "9"){
-
-                codigoValido = true;
-
-
-            } else {
-                //error
-            }
-        }
-    } 
-    return codigoValido;
-}
 
 // INICIO DE SESION EXITOSO
 
@@ -378,47 +228,33 @@ function CerrarSesion() {
     document.querySelector("#infoUsuario").style.display = "none";
 }
 
-//boton para realizar pedido
+// LANZAR COMPRA
 
-document.querySelector("#btnComprar").addEventListener("click", CrearCompra);
+function efectuarCompra(evt) {
+    let idProducto = Number(evt.currentTarget.idBotonComprar.charAt(evt.currentTarget.idBotonComprar.length-1));
+    let cantidadCompra = Number(document.querySelector(`#slcUnidades${idProducto}`).value);
+    console.log(`Intentaste comprar ${cantidadCompra} ${sistema.productos[idProducto-1].nombre}`);
 
-function CrearCompra(){
-    //toma de datos 
-    let campoUnidades = document.querySelector(".selectUnidades").value; //cantidad Unidades
-    let selectProd = document.querySelectorAll(`input[name="slcProducto"]`); //Producto Elegido con input radio
-    let productoDeseado;
-    for(let i = 0; i < selectProd.length; i++) {
-        
-        if(selectProd[i].checked){
-            productoDeseado = selectProd[i];
-        }
-    }
-    
-    
-    AgregarCompra(productoDeseado, campoUnidades);
+    AgregarCompra(idProducto, cantidadCompra);
 }
 
+// LANZAR COMPRA
 
 // tomar pedidos y agregarlos al historial
 
-function AgregarCompra(idProducto, unidadesProducto) {
+function AgregarCompra(idProductoDeseado, unidadesCompraDeseada) {
     // Buscar el producto con el id dado en el array de productos
-    let productoAux = null;  //variable nula
-    for (let i = 0; i < sistema.productos.length; i++) {  //recorrer los productos
-        if (sistema.productos[i].id === idProducto) {
-            productoAux = sistema.productos[i];     //la variable toma el valor de los productos
-        }
-    }
+    let costeTotal = sistema.productos[idProductoDeseado-1].precio * unidadesCompraDeseada;
 
-    if (productoAux != null) {
+    if(sistema.productos[idProductoDeseado-1].stock >= unidadesCompraDeseada) {
         // El producto fue encontrado, crea una nueva instancia de Compras
-        let compra = new Compra(usuarioActivo, productoAux.nombre, productoAux.precio, unidadesProducto);
+        let compra = new HistorialCompra(sistema.pedidos.length+1 ,usuarioActivo, idProductoDeseado, costeTotal, unidadesCompraDeseada, "Pendiente");
         // Almacena la compra en la lista de pedidos que esta en sistema
-        this.pedidos.push(compra);
+        sistema.pedidos.push(compra);
 
         console.log("Compra agregada al sistema:", compra);
-    } else {
-        console.log("No se encontró un producto con el id especificado.");
+    } else{
+        console.log("No hay suficiente stock del producto deseado");
     }
 }
 
@@ -574,17 +410,144 @@ function ActividadBotonProducto() {
     }
 }
 
-//seccion Historial y pedidos
 
-document.querySelector("#sectPedidos").innerHTML += `
 
+
+
+
+
+
+// SECCION PEDIDOS Y HISTORIAL
+
+function ActualizarPedidosYHistorial() {
+    document.querySelector("#tablaPedidosAdmin").innerHTML = `
+                    <thead>
+                        <td>
+                            ID en el Historial
+                        </td>
+                        <td>
+                            Usuario
+                        </td>
+                        <td>
+                            Saldo del usuario
+                        </td>
+                        <td>
+                            Unidades
+                        </td>
+                        <td>
+                            Nombre
+                        </td>
+                        <td>
+                            Subtotal
+                        </td>
+                        <td>
+                            Estado
+                        </td>
+                        <td>
+                            Opciones
+                        </td>
+                    </thead>`;
+    document.querySelector("#tablaPedidosCliente").innerHTML = `
+                    <thead>
+                        <td>
+                            Unidades
+                        </td>
+                        <td>
+                            Nombre
+                        </td>
+                        <td>
+                            Subtotal
+                        </td>
+                        <td>
+                            Estado
+                        </td>
+                    </thead>`;
+    document.querySelector("#pedidosClienteIdentificacion").innerHTML = usuarioActivo;
+
+    for(let i = 0; i < sistema.pedidos.length; i++) {
+        let textoPedido = "";
+        
+        if(usuarioActivo === sistema.pedidos[i].usuario) {
+            let idProducto = sistema.pedidos[i].productoId; 
+            textoPedido = `
             <tr>
-               <td>Usuario</td>
-                <td>Producto</td>
-                <td>Unidades</td>
-                <td>Precio</td>
-                <td><input type="button" id="btnAprobar" value="Aprobar Pedido"></td>
-                </tr>
-`;
+            <td>${sistema.pedidos[i].unidades}</td>
+            <td>${sistema.productos[idProducto-1].nombre}</td>
+            <td>${sistema.pedidos[i].costeTotal}</td>
+            <td>${sistema.pedidos[i].confirmacion}</td>
+            </tr>
+            `
+            document.querySelector("#tablaPedidosCliente").innerHTML += textoPedido;
+        }
+    }
 
+
+    for(let i = 0; i < sistema.pedidos.length; i++) {
+        let textoPedido = "";
+
+        let idProducto = sistema.pedidos[i].productoId;
+        let saldoUsuario = 0;
+        let disabledEnabled = "";
+
+        if(sistema.pedidos[i].confirmacion !== "Pendiente") {
+            disabledEnabled = ` disabled="disabled" `
+        }
+
+        for(let y = 0; y < sistema.usuarios.length; y++) {
+            if(sistema.usuarios[y].username === sistema.pedidos[i].usuario) {
+                saldoUsuario = sistema.usuarios[y].saldo;
+            }
+        }
+
+        textoPedido = `
+        <tr>
+        <td>${sistema.pedidos[i].id}</td>
+        <td>${sistema.pedidos[i].usuario}</td>
+        <td>${saldoUsuario}</td>
+        <td>${sistema.pedidos[i].unidades}</td>
+        <td>${sistema.productos[idProducto-1].nombre}</td>
+        <td>${sistema.pedidos[i].costeTotal}</td>
+        <td>${sistema.pedidos[i].confirmacion}</td>
+        <td style="display: flex;"><input ${disabledEnabled} id="btnCancelarPedido${sistema.pedidos[i].id}" type="button" value="Cancelar" class="button"><input ${disabledEnabled} id="btnConfirmarPedido${sistema.pedidos[i].id}" type="button" value="Confirmar" class="button"></td>
+        </tr>
+        `
+        document.querySelector("#tablaPedidosAdmin").innerHTML += textoPedido;
+    }
+
+
+    // Proporciona funcionalidad a los botones de compra del catalogo mediante un evento atado al id del boton utilizado en la funcion auxiliar efectuarCompra
+    for(let i = 0; i < sistema.pedidos.length; i++) {
+        if(sistema.pedidos[i].confirmacion === "Pendiente") {
+            var identifInputCancelar = document.querySelector(`#btnCancelarPedido${sistema.pedidos[i].id}`);
+            identifInputCancelar.addEventListener('click', efectuarCancelacion, false);
+            identifInputCancelar.idBotonCancelar = identifInputCancelar.id;
+
+            var identifInputConfirmar = document.querySelector(`#btnConfirmarPedido${sistema.pedidos[i].id}`);
+            identifInputConfirmar.addEventListener('click', efectuarConfirmacion, false);
+            identifInputConfirmar.idBotonConfirmar = identifInputConfirmar.id;
+        }
+    }
+}
+
+function efectuarCancelacion(evt) {
+    let idPedido = Number(evt.currentTarget.idBotonCancelar.charAt(evt.currentTarget.idBotonCancelar.length-1));
+    console.log(`Usted intentó cancelar el pedido ${idPedido}`);
+}
+
+function efectuarConfirmacion(evt) {
+    let idPedido = Number(evt.currentTarget.idBotonConfirmar.charAt(evt.currentTarget.idBotonConfirmar.length-1));
+    console.log(`Usted intentó confirmar el pedido ${idPedido}`);
+}
+
+//ver ganancias
+
+//function VerGanancias(){
+    //let gananciasTotales = 0;
+    //for (let i = 0; i < sistema.pedidos.length; i++){
+    //if(sistema.pedidos[i].confirmacion === "Confirmada"){
+        //gananciasTotales += sistema.pedidos[i].costeTotal;
+        //}
+        //console.log(`las ganancias totales son: $${gananciasTotales}`)
+    //}
+//}
 
