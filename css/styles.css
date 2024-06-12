@@ -285,3 +285,8 @@ figcaption div,h4,h5,p{
 input [type="radio"]{
   margin: 0;
 }
+
+#pError {
+  text-align: center;
+  margin: 0;
+}

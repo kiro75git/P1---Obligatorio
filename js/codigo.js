@@ -4,7 +4,6 @@ let saldoInicialDeUsuarioNuevo = 3000;
 
 let tipoDeSesion = 'cerrada';
 let usuarioActivo = "";
-let saldoDelUsuarioActivo = 0;
 
 function mostrarSeccion() {
     let idBoton = this.getAttribute("id");//"btnSeccionAgregar"
@@ -30,6 +29,8 @@ function cambiarSeccion(nuevaSeccion) {
         ActualizarInventario();
     }else if(nuevaSeccion === "sectPedidos") {
         ActualizarPedidosYHistorial();
+    } else if(nuevaSeccion === "sectGanancias"){
+        VerGanancias();
     }
 }
 cambiarSeccion("sectSesion");
@@ -143,27 +144,33 @@ function Registrar() {
     let passInput = String(document.querySelector("#ingresoContra").value);
     let usernameInput = String(document.querySelector("#ingresoUsername").value);
     let tarjetaInput = String(document.querySelector("#ingresoTarjeta").value);
-    let codigoCVC = document.querySelector("#ingresoCVC").value;
+    let codigoCVCinput = Number(document.querySelector("#ingresoCVC").value);
     let nombreInput = String(document.querySelector("#ingresoNombre").value);
 
-    VerificarCVC(codigoCVC);
-
+    
     if(verificarNombreYapellido(nombreInput)) {
-        if(VerificarPass(passInput) === "OK") {
-            sistema.agregarUsuario(mailInput, nombreInput, usernameInput, tarjetaInput, codigoCVC, passInput, "cliente", saldoInicialDeUsuarioNuevo);
-            
-            document.querySelector("#pError").innerHTML = `Se registró correctamente! Ahora inice sesión.`
-            document.querySelector("#formRegistro").style.display = "none";
-            console.log(sistema.usuarios);
-        }else{
-            // Error con los datos ingresados
-            document.querySelector("#pError").innerHTML = `${VerificarPass(passInput)}`;
+        if(validarTarjeta(tarjetaInput, codigoCVCinput)) {
+            if(VerificarNombreUsuario(usernameInput)){
+                if(VerificarPass(passInput) === "OK") {
+                    sistema.agregarUsuario(mailInput, nombreInput, usernameInput, tarjetaInput, codigoCVCinput, passInput, "cliente", saldoInicialDeUsuarioNuevo);
+                    
+                    document.querySelector("#pError").innerHTML = `Se registró correctamente! Ahora inice sesión.`
+                    document.querySelector("#formRegistro").style.display = "none";
+                    console.log(sistema.usuarios);
+                }else{
+                    // Error con los datos ingresados
+                    document.querySelector("#pError").innerHTML = `${VerificarPass(passInput)}`;
+                }
+            }
+        }else {
+            console.log("Tarjeta no valida");
         }
-    }else{
+    }else {
         document.querySelector("#pError").innerHTML = `Ingrese su nombre y apellido separados por un espacio.`;
-        
+        console.log("a");
         document.querySelector("#formRegistro").style.display = "block";
     }
+    
 }
 document.querySelector("#btnRegistro").addEventListener("click", Registrar);
 
@@ -192,7 +199,7 @@ document.querySelector("#btnInicioSesion").addEventListener("click", Ingresar);
 
 // INICIO DE SESION EXITOSO
 
-function ExitoAlIniciarSesion(sesionDelUsuario, nombreDelUsuario, saldoDelUsuario) {
+function ExitoAlIniciarSesion(sesionDelUsuario, nombreDelUsuario) {
     tipoDeSesion = sesionDelUsuario;
 
     mostrarElementosOcultos(tipoDeSesion);
@@ -201,15 +208,21 @@ function ExitoAlIniciarSesion(sesionDelUsuario, nombreDelUsuario, saldoDelUsuari
 
     usuarioActivo = nombreDelUsuario;
 
-    saldoDelUsuarioActivo = saldoDelUsuario;
+    ActualizarSaldo()
 
     cambiarSeccion("sectCatalogo");
 
     document.querySelector("#displayUsuario").innerHTML = `Sesión iniciada como ${nombreDelUsuario}`
 
-    document.querySelector("#displaySaldo").innerHTML = `Saldo: ${saldoDelUsuario}`
-
     document.querySelector("#infoUsuario").style.display = "block";
+}
+
+function ActualizarSaldo() {
+    for(let i = 0; i < sistema.usuarios.length; i++) {
+        if(sistema.usuarios[i].username === usuarioActivo) {
+            document.querySelector("#displaySaldo").innerHTML = `Saldo: ${sistema.usuarios[i].saldo}`;
+        }
+    }
 }
 
 function CerrarSesion() {
@@ -222,8 +235,6 @@ function CerrarSesion() {
     document.querySelector("#textoNavSesion").innerHTML = `Iniciar sesión`;
 
     usuarioActivo = "";
-
-    saldoDelUsuarioActivo = 0;
 
     document.querySelector("#infoUsuario").style.display = "none";
 }
@@ -461,11 +472,19 @@ function ActualizarPedidosYHistorial() {
                         <td>
                             Estado
                         </td>
+                        <td>
+                            Opciones
+                        </td>
                     </thead>`;
     document.querySelector("#pedidosClienteIdentificacion").innerHTML = usuarioActivo;
 
     for(let i = 0; i < sistema.pedidos.length; i++) {
         let textoPedido = "";
+        let disabledEnabled = "";
+
+        if(sistema.pedidos[i].confirmacion !== "Pendiente") {
+            disabledEnabled = ` disabled="disabled" `
+        }
         
         if(usuarioActivo === sistema.pedidos[i].usuario) {
             let idProducto = sistema.pedidos[i].productoId; 
@@ -475,12 +494,22 @@ function ActualizarPedidosYHistorial() {
             <td>${sistema.productos[idProducto-1].nombre}</td>
             <td>${sistema.pedidos[i].costeTotal}</td>
             <td>${sistema.pedidos[i].confirmacion}</td>
+            <td style="display: flex;"><input ${disabledEnabled} id="btnCancelarPedido${sistema.pedidos[i].id}" type="button" value="Cancelar"></td>
             </tr>
             `
             document.querySelector("#tablaPedidosCliente").innerHTML += textoPedido;
         }
     }
 
+    for(let i = 0; i < sistema.pedidos.length; i++) {
+        if(sistema.pedidos[i].usuario === usuarioActivo) {
+            if(sistema.pedidos[i].confirmacion === "Pendiente") {
+                var identifInputCancelar = document.querySelector(`#btnCancelarPedido${sistema.pedidos[i].id}`);
+                identifInputCancelar.addEventListener('click', efectuarCancelacion, false);
+                identifInputCancelar.idBotonCancelar = identifInputCancelar.id;
+            }
+        }
+    }
 
     for(let i = 0; i < sistema.pedidos.length; i++) {
         let textoPedido = "";
@@ -508,20 +537,14 @@ function ActualizarPedidosYHistorial() {
         <td>${sistema.productos[idProducto-1].nombre}</td>
         <td>${sistema.pedidos[i].costeTotal}</td>
         <td>${sistema.pedidos[i].confirmacion}</td>
-        <td style="display: flex;"><input ${disabledEnabled} id="btnCancelarPedido${sistema.pedidos[i].id}" type="button" value="Cancelar" class="button"><input ${disabledEnabled} id="btnConfirmarPedido${sistema.pedidos[i].id}" type="button" value="Confirmar" class="button"></td>
+        <td style="display: flex;"><input ${disabledEnabled} id="btnConfirmarPedido${sistema.pedidos[i].id}" type="button" value="Confirmar"></td>
         </tr>
         `
         document.querySelector("#tablaPedidosAdmin").innerHTML += textoPedido;
     }
 
-
-    // Proporciona funcionalidad a los botones de compra del catalogo mediante un evento atado al id del boton utilizado en la funcion auxiliar efectuarCompra
     for(let i = 0; i < sistema.pedidos.length; i++) {
         if(sistema.pedidos[i].confirmacion === "Pendiente") {
-            var identifInputCancelar = document.querySelector(`#btnCancelarPedido${sistema.pedidos[i].id}`);
-            identifInputCancelar.addEventListener('click', efectuarCancelacion, false);
-            identifInputCancelar.idBotonCancelar = identifInputCancelar.id;
-
             var identifInputConfirmar = document.querySelector(`#btnConfirmarPedido${sistema.pedidos[i].id}`);
             identifInputConfirmar.addEventListener('click', efectuarConfirmacion, false);
             identifInputConfirmar.idBotonConfirmar = identifInputConfirmar.id;
@@ -532,22 +555,79 @@ function ActualizarPedidosYHistorial() {
 function efectuarCancelacion(evt) {
     let idPedido = Number(evt.currentTarget.idBotonCancelar.charAt(evt.currentTarget.idBotonCancelar.length-1));
     console.log(`Usted intentó cancelar el pedido ${idPedido}`);
+
+    sistema.pedidos[idPedido-1].confirmacion = "Cancelado";
+    
+
+    ActualizarPedidosYHistorial();
 }
 
 function efectuarConfirmacion(evt) {
     let idPedido = Number(evt.currentTarget.idBotonConfirmar.charAt(evt.currentTarget.idBotonConfirmar.length-1));
     console.log(`Usted intentó confirmar el pedido ${idPedido}`);
+
+    sistema.pedidos[idPedido-1].confirmacion = "Confirmado";
+
+    if(sistema.pedidos[idPedido-1].confirmacion = "Confirmado"){
+        for(let i = 0; i < sistema.usuarios.length; i++){
+            let pedidoActual = sistema.pedidos[idPedido-1];
+            if(sistema.usuarios[i].username === pedidoActual.usuario){
+                sistema.usuarios[i].saldo -= pedidoActual.costeTotal;
+                sistema.productos[pedidoActual.productoId].stock -= pedidoActual.unidades;
+                ActualizarSaldo()
+                console.log(`Se hizo la compra`);
+            }
+        }
+    }
+
+    ActualizarPedidosYHistorial();
 }
 
 //ver ganancias
 
-//function VerGanancias(){
-    //let gananciasTotales = 0;
-    //for (let i = 0; i < sistema.pedidos.length; i++){
-    //if(sistema.pedidos[i].confirmacion === "Confirmada"){
-        //gananciasTotales += sistema.pedidos[i].costeTotal;
-        //}
-        //console.log(`las ganancias totales son: $${gananciasTotales}`)
-    //}
-//}
+function VerGanancias(){
+    let gananciasTotales = 0;
+
+    document.querySelector("#tablaGananciasTotales").innerHTML = `
+    <thead>
+                        <td>
+                             Producto
+                        </td>
+                        <td>
+                             Unidades vendidas
+                        </td>
+                        <td>
+                             Ganancia del producto
+                        </td>
+                    </thead>
+    `
+
+    let textoConfirmados = "";
+    
+    let productoAinspeccionar = "";
+    for (let i = 0; i < sistema.productos.length; i++) {
+        productoAinspeccionar = sistema.productos[i];
+        let idProducto = sistema.productos[i].id
+        let costeTotalEsteProducto = 0;
+        let unidadesVendidasEsteProducto = 0;
+        for (let y = 0; y < sistema.pedidos.length; y++) {
+            if(sistema.pedidos[y].productoId === idProducto && sistema.pedidos[y].confirmacion === "Confirmado") {
+                costeTotalEsteProducto += sistema.pedidos[y].costeTotal;
+                unidadesVendidasEsteProducto += sistema.pedidos[y].unidades;
+            }
+        }
+    
+
+        
+        textoConfirmados = `
+        <tr>
+            <td>${productoAinspeccionar.nombre}</td>
+            <td>${unidadesVendidasEsteProducto}</td>
+            <td>${costeTotalEsteProducto}</td>
+        </tr>`;
+        document.querySelector("#tablaGananciasTotales").innerHTML += textoConfirmados;
+    }
+}
+
+
 

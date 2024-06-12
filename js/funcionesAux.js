@@ -63,9 +63,18 @@ function VerificarPass(pass) {
 }
 
 //verificar ingreso de tarjeta
-function validarTarjeta(nroTarjeta) {
-    //funcion para verificar tarjeta:
+function validarTarjeta(nroTarjeta, codigoCVC) {
+    // cvc
 
+    codigoValido = false;
+
+    if(String(codigoCVC).length === 3) {
+        codigoValido = true;
+    }
+
+    //funcion para verificar tarjeta:
+    
+    let dev = false;
     let contadorGuiones = 0;
         
     for(let r = 0; r < nroTarjeta.length; r++){
@@ -76,59 +85,49 @@ function validarTarjeta(nroTarjeta) {
         }
     }
 
-    if (contadorGuiones === 3){
-            let acumulador = 0;
-            let digitoVerificar = nroTarjeta.charAt(nroTarjeta.length - 1);
-            let dev = false;
-            let cont = 0;
-            for (let i = nroTarjeta.length - 2; i >= 0; i--) {
-                let valorAcumular = Number(nroTarjeta.charAt(i));
-                if (cont % 2 === 0) {
-                    let duplicado = Number(nroTarjeta.charAt(i)) * 2;
-                    if (duplicado >= 10) {
-                        let duplicadoStr = String(duplicado);
-                        let suma = Number(duplicadoStr.charAt(0)) + Number(duplicadoStr.charAt(1));
-                        valorAcumular = suma;
-                    } else {
-                        valorAcumular = duplicado;
-                    }
-                }
-                acumulador += valorAcumular;
-                cont++;
-            }
-            let multiplicado = acumulador * 9;
-            let multiplicadoStr = String(multiplicado);
-            let digitoVerificador = multiplicadoStr.charAt(multiplicadoStr.length - 1);
-            if (digitoVerificar === digitoVerificador) {
-                dev = true;
-            }
-            return dev;
+    let tarjetaDepurada = "";
+    for(let i = 0; i < nroTarjeta.length; i++) {
+        let numero = Number(nroTarjeta.charAt(i));
+        if(!isNaN(numero)) {
+            tarjetaDepurada += String(numero);
+        }
+    }
 
+    if (contadorGuiones === 3){
+        let acumulador = 0;
+        let digitoVerificar = tarjetaDepurada.charAt(tarjetaDepurada.length - 1);
+        
+        let cont = 0;
+        for (let i = tarjetaDepurada.length - 2; i >= 0; i--) {
+            let valorAcumular = Number(tarjetaDepurada.charAt(i));
+            if (cont % 2 === 0) {
+                let duplicado = Number(tarjetaDepurada.charAt(i)) * 2;
+                if (duplicado >= 10) {
+                    let duplicadoStr = String(duplicado);
+                    let suma = Number(duplicadoStr.charAt(0)) + Number(duplicadoStr.charAt(1));
+                    valorAcumular = suma;
+                } else {
+                    valorAcumular = duplicado;
+                }
+            }
+            acumulador += valorAcumular;
+            cont++;
+        }
+        let multiplicado = acumulador * 9;
+        let multiplicadoStr = String(multiplicado);
+        let digitoVerificador = multiplicadoStr.charAt(multiplicadoStr.length - 1);
+        if (digitoVerificar === digitoVerificador) {
+            dev = true;
+        }
+    
     }else {
         document.querySelector("#pError").innerHTML = "ocurrió un error al ingresar los datos"
     }
-}
-
-//verificar codigo de seguridad (CVC)
-function VerificarCVC(codigoCVC){
-
-    codigoValido = false;
-
-    if(codigoCVC.length === 3){
-        for (let i = 0; i < codigoCVC.length; i++){
-            let valorCaracter = codigoCVC.charAt(i);
-
-            if(valorCaracter >= "0" && valorCaracter <= "9"){
-
-                codigoValido = true;
-
-
-            } else {
-                //error
-            }
-        }
-    } 
-    return codigoValido;
+    if(dev && codigoValido) {
+        return true;
+    }else {
+        return false;
+    }
 }
 
 //verificar ingreso nombre y apellido
@@ -150,4 +149,19 @@ function verificarNombreYapellido(nombreUsuario){
     }
     
     return verificarEspacio;
+}
+
+function VerificarNombreUsuario(nombreUsuarioIng){
+    let usuarioValido = true;
+    let usuarioMin = nombreUsuarioIng.toLowerCase();
+    for(let i = 0; i < sistema.usuarios.length; i++){
+
+        if(usuarioMin === sistema.usuarios[i].username){
+            usuarioValido = false;
+            console.log("el nombre de usuario elegido ya existe");
+        } else {
+            console.log("nombre de usuario valido");
+        }
+    }
+    return usuarioValido;
 }

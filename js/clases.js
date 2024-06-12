@@ -42,9 +42,9 @@ class HistorialCompra{
 class Sistema {
     constructor() {
         this.usuarios = [
-            new Usuario("santi@gmail.com", "Santiago", "santiszucs", "7754-8901-1011-6709", "345", "Santi0000", "admin", 8000),
-            new Usuario("lucas@gmail.com", "Lucas", "lucasbenta", "4456-6765-8409-1010", "765", "Lucas0000", "admin", 7000),
-            new Usuario("maria@gmail.com", "Maria", "mariaadu", "3267-8902-5986-1232", "911", "Maria0000", "cliente", 9000)
+            new Usuario("santi@gmail.com", "Santiago", "santiszucs", "7754-8901-1011-6709", "345", "Santi0000", "admin", 18000),
+            new Usuario("lucas@gmail.com", "Lucas", "lucasbenta", "4456-6765-8409-1010", "765", "Lucas0000", "admin", 17000),
+            new Usuario("maria@gmail.com", "Maria", "mariaadu", "3267-8902-5986-1232", "911", "Maria0000", "cliente", 19000)
         ];
 
         this.productos = [
@@ -56,11 +56,11 @@ class Sistema {
 
         this.pedidos = [
             new HistorialCompra(1, "lucasbenta", 2, 2900, 1, "Pendiente"),
-            new HistorialCompra(2, "mariaadu", 3, 4000, 1, "Confirmada"),
+            new HistorialCompra(2, "mariaadu", 3, 4000, 1, "Confirmado"),
             new HistorialCompra(3, "mariaadu", 1, 3200, 1, "Pendiente"),
-            new HistorialCompra(4, "mariaadu", 4, 6800, 2, "Confirmada"),
-            new HistorialCompra(5, "lucasbenta", 3, 8000, 2, "Confirmada"),
-            new HistorialCompra(6, "santiszucs", 3, 4000, 1, "Confirmada"),
+            new HistorialCompra(4, "mariaadu", 4, 6800, 2, "Confirmado"),
+            new HistorialCompra(5, "lucasbenta", 3, 8000, 2, "Confirmado"),
+            new HistorialCompra(6, "santiszucs", 3, 4000, 1, "Confirmado"),
             new HistorialCompra(7, "santiszucs", 2, 5800, 2, "Pendiente")
         ]
 
