@@ -125,6 +125,13 @@ thead {
   font-weight: normal;
 }
 
+tfoot {
+  border-top: 1px solid black;
+  background-color: #fafafa;
+  color: #002e4a;
+  font-weight: normal;
+}
+
 table img {
   max-width: 100px;
 }

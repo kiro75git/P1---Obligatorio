@@ -80,13 +80,18 @@ function ActualizarCatalogo() {
         let productoActual = sistema.productos[i];
         let stockDelProd = "";
         let idDelProd = productoActual.id;
+        let textoBoton = "Comprar";
+        let textoClassDisabled = "";
         if(productoActual.stock > 0) {
             stockDelProd = String(productoActual.stock);
         }else{
-            stockDelProd = "SIN STOCK!";
+            stockDelProd = 0;
+            textoBoton = "SIN STOCK!";
+            textoClassDisabled = `disabled="disabled"`;
         }
 
         let options = "";
+        
         for(let i = 1; i <= stockDelProd; i++) {
             options += `<option value="${i}">${i}</option>`;
         }
@@ -103,7 +108,7 @@ function ActualizarCatalogo() {
                         <img src="${productoActual.imagen}" alt="${productoActual.nombre}">
                         <figcaption>
                             <div class="comprar">
-                                <input type="button" value="Comprar" id="btnCompra${idDelProd}" class="button">
+                                <input type="button" value="${textoBoton}" ${textoClassDisabled} id="btnCompra${idDelProd}" class="button">
                                 <select id="slcUnidades${idDelProd}" class="selectUnidades">
                                     ${options}
                                 </select>
@@ -242,7 +247,7 @@ function CerrarSesion() {
 // LANZAR COMPRA
 
 function efectuarCompra(evt) {
-    let idProducto = Number(evt.currentTarget.idBotonComprar.charAt(evt.currentTarget.idBotonComprar.length-1));
+    let idProducto = Number(evt.currentTarget.idBotonComprar.substring(9)); // substring(9) toma el valor del string a partir de la posicion 9, osea toma el id del producto
     let cantidadCompra = Number(document.querySelector(`#slcUnidades${idProducto}`).value);
     console.log(`Intentaste comprar ${cantidadCompra} ${sistema.productos[idProducto-1].nombre}`);
 
@@ -553,7 +558,7 @@ function ActualizarPedidosYHistorial() {
 }
 
 function efectuarCancelacion(evt) {
-    let idPedido = Number(evt.currentTarget.idBotonCancelar.charAt(evt.currentTarget.idBotonCancelar.length-1));
+    let idPedido = Number(evt.currentTarget.idBotonCancelar.substring(17)); // Substring(17) toma el texto que sigue a #btnCancelarPedido, vease toma el id del pedido, #btnCancelarPedido tiene 17 letras, por lo tanto se toma el texto a partir de las 17 letras iniciales.
     console.log(`Usted intentó cancelar el pedido ${idPedido}`);
 
     sistema.pedidos[idPedido-1].confirmacion = "Cancelado";
@@ -563,7 +568,7 @@ function efectuarCancelacion(evt) {
 }
 
 function efectuarConfirmacion(evt) {
-    let idPedido = Number(evt.currentTarget.idBotonConfirmar.charAt(evt.currentTarget.idBotonConfirmar.length-1));
+    let idPedido = Number(evt.currentTarget.idBotonConfirmar.substring(18));
     console.log(`Usted intentó confirmar el pedido ${idPedido}`);
 
     sistema.pedidos[idPedido-1].confirmacion = "Confirmado";
@@ -573,7 +578,9 @@ function efectuarConfirmacion(evt) {
             let pedidoActual = sistema.pedidos[idPedido-1];
             if(sistema.usuarios[i].username === pedidoActual.usuario){
                 sistema.usuarios[i].saldo -= pedidoActual.costeTotal;
-                sistema.productos[pedidoActual.productoId].stock -= pedidoActual.unidades;
+                sistema.productos[pedidoActual.productoId-1].stock -= pedidoActual.unidades;
+                console.log(sistema.productos[pedidoActual.productoId-1].stock);
+                console.log(pedidoActual.unidades);
                 ActualizarSaldo()
                 console.log(`Se hizo la compra`);
             }
@@ -616,8 +623,7 @@ function VerGanancias(){
                 unidadesVendidasEsteProducto += sistema.pedidos[y].unidades;
             }
         }
-    
-
+        gananciasTotales += costeTotalEsteProducto;
         
         textoConfirmados = `
         <tr>
@@ -627,6 +633,14 @@ function VerGanancias(){
         </tr>`;
         document.querySelector("#tablaGananciasTotales").innerHTML += textoConfirmados;
     }
+
+    document.querySelector("#tablaGananciasTotales").innerHTML += `
+    <tfoot>
+        <td></td>
+        <td>Ganancias totales:</td>
+        <td>${gananciasTotales}</td>
+    </tfoot>
+    `
 }
 
 
