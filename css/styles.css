@@ -111,6 +111,7 @@ td {
   padding-bottom: 5px;
   padding-top: 5px;
   background-color: #fafafa;
+  align-items: center;
   text-align: center;
 }
 
@@ -207,6 +208,7 @@ input[type="button"]:disabled {
 
 main {
   min-height: 250px;
+  padding: 0;
 }
 
 /* Estilos del footer */
@@ -230,9 +232,12 @@ footer a {
 
 #sectCatalogo {
   height: 800px;
-  width: 100%;
   background-color: beige;
-  padding: 20px;
+}
+
+.seccion {
+  width: 96%;
+  padding: 2%;
 }
 
 #sectCatalogo article {
@@ -252,21 +257,22 @@ footer a {
 }
 
 .comprar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-sizing: border-box;
-    gap: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;
+  gap: 5px;
 }
 
 #seccionCargaProductosJS {
-  width: 1025px;
+  width: 910px;
   margin: 0 auto;
 
 
   display: grid;
 
-  grid-template-columns: repeat(2, 500px);
+  grid-template-columns: repeat(3, 300px);
     
   gap: 25px;
 }
@@ -289,11 +295,17 @@ figcaption div,h4,h5,p{
   padding: 0 auto;
 }
 
-input [type="radio"]{
-  margin: 0;
-}
-
 #pError {
   text-align: center;
   margin: 0;
+}
+
+#btnCrearNuevoProducto {
+  width: 350px;
+}
+
+#pControlCrearProducto, #mensajeDeExitoErrorInventario {
+  width: 350px;
+  margin: 0;
+  padding: 0;
 }

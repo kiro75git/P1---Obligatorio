@@ -25,12 +25,13 @@
                 <li id="btnSectPedidos" class="elementoOcultable cliente admin">
                     <a>Pedidos</a>
                 </li>
-                <li id="btnSectSesion" class="elementoOcultable cerrada cliente admin">
-                    <a id="textoNavSesion">Iniciar Sesión</a>
-                </li>
                 <li id="btnSectGanancias" class="elementoOcultable admin">
                     <a>Ganancias</a>
                 </li>
+                <li id="btnSectSesion" class="elementoOcultable cerrada cliente admin">
+                    <a id="textoNavSesion">Iniciar Sesión</a>
+                </li>
+                
             </ul>
         </nav>
     </header>
@@ -150,9 +151,16 @@
         </section>
 
     </main>
-<script src="js/clases.js"></script>
-<script src="js/funcionesAux.js"></script>
-<script src="js/codigo.js"></script>
+
+<script src="js/auxClases.js"></script>
+<script src="js/auxFunciones.js"></script>
+<script src="js/seccSesion.js"></script> <!-- TAMBIEN INCLUYE EL INSTANCIADO DE LA CLASE SISTEMA, POR LO TANTO ES IMPORTANTE QUE VAYA PREVIO A EL RESTO DEL CODIGO -->
+
+<script src="js/seccGanancias.js"></script>
+<script src="js/seccCatalogo.js"></script>
+<script src="js/seccInventario.js"></script>
+<script src="js/seccPedidos.js"></script>
+<script src="js/main.js"></script>
  
 </body>
 </html>

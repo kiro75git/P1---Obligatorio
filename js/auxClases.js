@@ -48,20 +48,20 @@ class Sistema {
         ];
 
         this.productos = [
-            new Stock(1, "Campera Nike", "Campera marca Nike, deportiva negra", "https://f.fcdn.app/imgs/63379c/www.globalsports.com.uy/gls/88f1/original/catalogo/NKBV2648-010-1/1500-1500/campera-nike-sportswear-club-black.jpg", 500, false, true, 30),
+            new Stock(1, "Campera Nike", "Campera marca Nike, deportiva negra", "https://f.fcdn.app/imgs/63379c/www.globalsports.com.uy/gls/88f1/original/catalogo/NKBV2648-010-1/1500-1500/campera-nike-sportswear-club-black.jpg", 500, true, true, 30),
             new Stock(2, "Campera Adidas", "Campera marca Adidas superstar, deportiva negra", "https://f.fcdn.app/imgs/323a82/www.zooko.com.uy/zoo/37bb/original/catalogo/ADCW1256-1032-1/460x460/campera-adidas-superstar-tt-black.jpg", 700, false, true, 40),
-            new Stock(3, "Championes Nike", "Championes nike dunk low twist blancos", "https://f.fcdn.app/imgs/e0da12/www.zooko.com.uy/zoo/5637/original/catalogo/NKDZ2794-001-1/1920-1200/championes-nike-nike-dunk-low-twist-black.jpg", 2000, false, true, 15),
-            new Stock(4, "Pantalon Adidas", "Pantalon deportivo adidas negro, de triple raya clásico", "https://f.fcdn.app/imgs/028d00/www.zooko.com.uy/zoo/ee3f/original/catalogo/ADGF0210-000-5/460x460/pantalon-adidas-classics-superstar-black.jpg", 1000, false, true, 12)
+            new Stock(3, "Championes Nike", "Championes nike dunk low twist blancos", "https://f.fcdn.app/imgs/e0da12/www.zooko.com.uy/zoo/5637/original/catalogo/NKDZ2794-001-1/1920-1200/championes-nike-nike-dunk-low-twist-black.jpg", 900, false, false, 15),
+            new Stock(4, "Pantalon Adidas", "Pantalon deportivo adidas negro, de triple raya clásico", "https://f.fcdn.app/imgs/028d00/www.zooko.com.uy/zoo/ee3f/original/catalogo/ADGF0210-000-5/460x460/pantalon-adidas-classics-superstar-black.jpg", 450, false, true, 12)
         ]
 
         this.pedidos = [
-            new HistorialCompra(1, "lucasbenta", 2, 2900, 1, "Pendiente"),
-            new HistorialCompra(2, "mariaadu", 3, 4000, 1, "Confirmado"),
-            new HistorialCompra(3, "mariaadu", 1, 3200, 1, "Pendiente"),
-            new HistorialCompra(4, "mariaadu", 4, 6800, 2, "Confirmado"),
-            new HistorialCompra(5, "lucasbenta", 3, 8000, 2, "Confirmado"),
-            new HistorialCompra(6, "santiszucs", 3, 4000, 1, "Confirmado"),
-            new HistorialCompra(7, "santiszucs", 2, 5800, 2, "Pendiente")
+            new HistorialCompra(1, "lucasbenta", 2, 700, 1, "Pendiente"),
+            new HistorialCompra(2, "mariaadu", 3, 900, 1, "Confirmado"),
+            new HistorialCompra(3, "mariaadu", 1, 500, 1, "Pendiente"),
+            new HistorialCompra(4, "mariaadu", 4, 900, 2, "Confirmado"),
+            new HistorialCompra(5, "lucasbenta", 3, 1800, 2, "Confirmado"),
+            new HistorialCompra(6, "santiszucs", 3, 900, 1, "Confirmado"),
+            new HistorialCompra(7, "santiszucs", 2, 1400, 2, "Pendiente")
         ]
 
         
