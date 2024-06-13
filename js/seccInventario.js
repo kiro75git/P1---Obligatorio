@@ -127,18 +127,43 @@ function ActividadBotonProducto() {
                     <label for="inpDescuentoNuevoProducto">Se encuentra de descuento: </label><input type="checkbox" id="inpDescuentoNuevoProducto">
                     <label for="inpActivoNuevoProducto">Se encuentra activo: </label><input type="checkbox" id="inpActivoNuevoProducto">
                     <label for="inpStockNuevoProducto">Stock inicial: </label><input type="number" id="inpStockNuevoProducto">
-                    <label for="inpImagenNuevoProducto">Imagen (URL): </label><input type="text" id="inpImagenNuevoProducto">`;
+                    <label for="inpImagenNuevoProducto">Imagen:</label> <br>
+                                                                        <form>
+                                                                        <label for="botinesSlc">Botines</label>
+                                                                        <input type="radio" id="botinesSlc" value="${urlImagenes[0]}" name="newProductImg"> <br>
+
+                                                                        <label for="mediasSlc">Medias</label>
+                                                                        <input type="radio" id="mediasSlc" value="${urlImagenes[1]}" name="newProductImg"> <br>
+
+                                                                        <label for="cuelloSlc">Cuello termico</label>
+                                                                        <input type="radio" id="cuelloSlc" value="${urlImagenes[2]}" name="newProductImg"> <br>
+
+                                                                        <label for="shortSlc">Short deportivo</label>
+                                                                        <input type="radio" id="shortSlc" value="${urlImagenes[3]}" name="newProductImg"> <br>
+
+                                                                        <label for="gorroSlc">Gorro</label>
+                                                                        <input type="radio" id="gorroSlc" value="${urlImagenes[4]}" name="newProductImg"> <br>
+                                                                        </form>`;
         document.querySelector("#btnCrearNuevoProducto").value = "Crear Producto";
     }else if(String(document.querySelector("#btnCrearNuevoProducto").value) === "Crear Producto") {
+        let imagenNueva = null; // variable de imagen vacía (si no se selecciona imagen no se actualiza)
         let nombreNuevo = document.querySelector("#inpNombreNuevoProducto").value;
         let descNueva = document.querySelector("#inpDescNuevoProducto").value;
         let precioNuevo = document.querySelector("#inpPrecioNuevoProducto").value;
         let descuentoNuevo = document.querySelector("#inpDescuentoNuevoProducto").checked;
         let activoNuevo = document.querySelector("#inpActivoNuevoProducto").checked;
         let stockNuevo = document.querySelector("#inpStockNuevoProducto").value;
-        let imagenNueva = document.querySelector("#inpImagenNuevoProducto").value;
+        let slcImagen = document.querySelectorAll('input[name="newProductImg"]');
 
-        if(nombreNuevo !== "" && descNueva !== "" && precioNuevo !== 0 && imagenNueva !== "" && stockNuevo >= 0) {
+        for(let i = 0;i < slcImagen.length; i++){
+            if (slcImagen[i].checked){
+                imagenNueva = slcImagen[i].value;
+    
+                console.log(`${imagenNueva} fue seleccionado`);
+            }
+        }
+
+        if(nombreNuevo !== "" && descNueva !== "" && precioNuevo !== 0 && imagenNueva !== null && stockNuevo >= 0) {
             let idNuevo = "ID_PROD_" + String(Number(sistema.productos.length) + 1);
             let productoNuevo = new Stock(idNuevo, nombreNuevo, descNueva, imagenNueva, precioNuevo, descuentoNuevo, activoNuevo, stockNuevo);
             sistema.productos.push(productoNuevo);

@@ -72,3 +72,11 @@ class Sistema {
         this.usuarios.push(objUsuario);
     }
 }
+
+let urlImagenes = [
+    "https://m.media-amazon.com/images/I/71YNztim1US._AC_SL1500_.jpg", //botines
+    "https://f.fcdn.app/imgs/851216/www.globalsports.com.uy/gls/336d/original/catalogo/ADHT3458-3638-1/2000-2000/medias-adidas-socks-3-white.jpg", //medias
+    "https://http2.mlstatic.com/D_996605-MLA41743524392_052020-C.jpg", //cuello termico
+    "https://f.fcdn.app/imgs/6031ac/www.stadiumsport.uy/stspuy/1b04/original/catalogo/118.562000001/2000-2000/short-de-mujer-under-armour-fly-by-2-0-negro.jpg", //short
+    "https://http2.mlstatic.com/D_NQ_NP_788947-MLU72934288077_112023-O.webp" //gorro
+];
