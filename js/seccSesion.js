@@ -43,10 +43,10 @@ document.querySelector("#btnRegistro").addEventListener("click", Registrar);
 
 function Ingresar() {
     let passInput = String(document.querySelector("#ingresoContra").value);
-    let usernameInput = String(document.querySelector("#ingresoUsername").value);
+    let usernameInput = String(document.querySelector("#ingresoUsername").value).toLowerCase();
 
     for(let i=0; i < sistema.usuarios.length; i++) {
-        if(usernameInput === sistema.usuarios[i].username) {
+        if(usernameInput === String(sistema.usuarios[i].username).toLowerCase()) {
             console.log("Usuario encontrado");
             if(passInput === sistema.usuarios[i].contrasena) {
       

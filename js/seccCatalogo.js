@@ -2,12 +2,13 @@
 
 function ActualizarCatalogo() {
     document.querySelector("#seccionCargaProductosJS").innerHTML = "";
+    document.querySelector("#seccionCargaDescuentosJS").innerHTML = "";
     let contadorInactivos = 0;
     let mensajeInactivos = "";
     for(let i = 0; i < sistema.productos.length; i++) {
         let productoActual = sistema.productos[i];
         let stockDelProd = "";
-        let idDelProd = productoActual.id;
+        let idDelProd = productoActual.id.substring(8);
         let textoBoton = "Comprar";
         let textoClassDisabled = "";
         let textoHtmlDescuentoTrue = "";
@@ -18,7 +19,7 @@ function ActualizarCatalogo() {
             textoBoton = "SIN STOCK!";
             textoClassDisabled = `disabled="disabled"`;
         }
-        if(productoActual.descuento) {
+        if(productoActual.oferta) {
             textoHtmlDescuentoTrue = `<h3>¡DE DESCUENTO!</h3>`;
         }
 
@@ -29,9 +30,9 @@ function ActualizarCatalogo() {
         }
         
         // Generacion del producto en el catálogo
-        if(productoActual.activo) {
+        if(productoActual.activo && productoActual.stock > 0) {
             document.querySelector("#seccionCargaProductosJS").innerHTML += `
-            <article class="producto">
+                <article class="producto">
                     <figure>
                         <img src="${productoActual.imagen}" alt="${productoActual.nombre}">
                         <figcaption>
@@ -49,7 +50,34 @@ function ActualizarCatalogo() {
                     </figure>
                 </article>
             `
-
+            if(productoActual.oferta) {
+                document.querySelector("#seccionCargaDescuentosJS").innerHTML += `
+                    <article class="producto">
+                        <figure>
+                            <img src="${productoActual.imagen}" alt="${productoActual.nombre}">
+                            <figcaption>
+                                <div class="comprar">
+                                    <input type="button" value="${textoBoton}" ${textoClassDisabled} id="btnDescue${idDelProd}" class="button">
+                                    <select id="slcUnidDesc${idDelProd}" class="selectUnidades">
+                                        ${options}
+                                    </select>
+                                </div>
+                                ${textoHtmlDescuentoTrue}
+                                <h4>${productoActual.nombre} - ${productoActual.precio}</h4>
+                                <p>${productoActual.descripcion}</p>
+                                
+                            </figcaption>
+                        </figure>
+                    </article>
+                `
+            }
+        }else if(productoActual.activo && productoActual.stock <= 0) {
+            productoActual.activo = false;
+            console.log(`/////////////////////////////////////////////////////////`);
+            console.log(`El producto ${productoActual.nombre}, se encontraba activo a pesar de no tener stock, se ha cambiado a inactivo automáticamente`);
+            console.log(`/////////////////////////////////////////////////////////`);
+            contadorInactivos += 1;
+            mensajeInactivos += `${productoActual.nombre}, `
         }else {
             contadorInactivos += 1;
             mensajeInactivos += `${productoActual.nombre}, `;
@@ -66,9 +94,19 @@ function ActualizarCatalogo() {
             identifInput.idBotonComprar = identifInput.id;
         }
     }
+
+    for(let i = 0; i < sistema.productos.length; i++) {
+        if(sistema.productos[i].activo && sistema.productos[i].oferta) {
+            var identifInputDescuento = document.querySelector(`#btnDescue${i+1}`);
+            identifInputDescuento.addEventListener('click', efectuarCompraOferta, false);
+            identifInputDescuento.idBotonComprar = identifInputDescuento.id;
+        }
+    }
     
     if(tipoDeSesion === "admin" && contadorInactivos > 0) {
-        alert(`Hay ${contadorInactivos} productos inactivos: ${mensajeInactivos}`);
+        console.log(`/////////////////////////////////////////////////////////`);
+        console.log(`Hay ${contadorInactivos} productos inactivos: ${mensajeInactivos}`);
+        console.log(`/////////////////////////////////////////////////////////`);
     }
     mostrarElementosOcultos(tipoDeSesion);
 }
@@ -78,7 +116,15 @@ function ActualizarCatalogo() {
 function efectuarCompra(evt) {
     let idProducto = Number(evt.currentTarget.idBotonComprar.substring(9)); // substring(9) toma el valor del string a partir de la posicion 9, osea toma el id del producto
     let cantidadCompra = Number(document.querySelector(`#slcUnidades${idProducto}`).value);
-    console.log(`Intentaste comprar ${cantidadCompra} ${sistema.productos[idProducto-1].nombre}`);
+    console.log(`Intentaste comprar ${cantidadCompra} ${sistema.productos[idProducto-1].nombre} desde el panel común`);
+
+    AgregarCompra(idProducto, cantidadCompra);
+}
+
+function efectuarCompraOferta(evt) {
+    let idProducto = Number(evt.currentTarget.idBotonComprar.substring(9)); // substring(9) toma el valor del string a partir de la posicion 9, osea toma el id del producto
+    let cantidadCompra = Number(document.querySelector(`#slcUnidDesc${idProducto}`).value);
+    console.log(`Intentaste comprar ${cantidadCompra} ${sistema.productos[idProducto-1].nombre} desde el panel de oferta`);
 
     AgregarCompra(idProducto, cantidadCompra);
 }

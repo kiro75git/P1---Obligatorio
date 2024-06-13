@@ -231,7 +231,7 @@ footer a {
 /* Modificaciones propias */
 
 #sectCatalogo {
-  height: 800px;
+  height: 100%;
   background-color: beige;
 }
 
@@ -265,7 +265,7 @@ footer a {
   gap: 5px;
 }
 
-#seccionCargaProductosJS {
+#seccionCargaProductosJS, #seccionCargaDescuentosJS {
   width: 910px;
   margin: 0 auto;
 

@@ -48,10 +48,10 @@ class Sistema {
         ];
 
         this.productos = [
-            new Stock(1, "Campera Nike", "Campera marca Nike, deportiva negra", "https://f.fcdn.app/imgs/63379c/www.globalsports.com.uy/gls/88f1/original/catalogo/NKBV2648-010-1/1500-1500/campera-nike-sportswear-club-black.jpg", 500, true, true, 30),
-            new Stock(2, "Campera Adidas", "Campera marca Adidas superstar, deportiva negra", "https://f.fcdn.app/imgs/323a82/www.zooko.com.uy/zoo/37bb/original/catalogo/ADCW1256-1032-1/460x460/campera-adidas-superstar-tt-black.jpg", 700, false, true, 40),
-            new Stock(3, "Championes Nike", "Championes nike dunk low twist blancos", "https://f.fcdn.app/imgs/e0da12/www.zooko.com.uy/zoo/5637/original/catalogo/NKDZ2794-001-1/1920-1200/championes-nike-nike-dunk-low-twist-black.jpg", 900, false, false, 15),
-            new Stock(4, "Pantalon Adidas", "Pantalon deportivo adidas negro, de triple raya clásico", "https://f.fcdn.app/imgs/028d00/www.zooko.com.uy/zoo/ee3f/original/catalogo/ADGF0210-000-5/460x460/pantalon-adidas-classics-superstar-black.jpg", 450, false, true, 12)
+            new Stock("PROD_ID_1", "Campera Nike", "Campera marca Nike, deportiva negra", "https://f.fcdn.app/imgs/63379c/www.globalsports.com.uy/gls/88f1/original/catalogo/NKBV2648-010-1/1500-1500/campera-nike-sportswear-club-black.jpg", 500, true, true, 30),
+            new Stock("PROD_ID_2", "Campera Adidas", "Campera marca Adidas superstar, deportiva negra", "https://f.fcdn.app/imgs/323a82/www.zooko.com.uy/zoo/37bb/original/catalogo/ADCW1256-1032-1/460x460/campera-adidas-superstar-tt-black.jpg", 700, false, true, 40),
+            new Stock("PROD_ID_3", "Championes Nike", "Championes nike dunk low twist blancos", "https://f.fcdn.app/imgs/e0da12/www.zooko.com.uy/zoo/5637/original/catalogo/NKDZ2794-001-1/1920-1200/championes-nike-nike-dunk-low-twist-black.jpg", 900, true, true, 15),
+            new Stock("PROD_ID_4", "Pantalon Adidas", "Pantalon deportivo adidas negro, de triple raya clásico", "https://f.fcdn.app/imgs/028d00/www.zooko.com.uy/zoo/ee3f/original/catalogo/ADGF0210-000-5/460x460/pantalon-adidas-classics-superstar-black.jpg", 450, false, true, 12)
         ]
 
         this.pedidos = [

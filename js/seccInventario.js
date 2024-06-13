@@ -17,7 +17,7 @@ function MostrarInformacionProdcutoInventario() {
     let IDSeleccionado = Number(document.querySelector("#slcProductoAdministrar").value) + 1;
     let ProductoSeleccionado = undefined;
     for(let i = 0; i < sistema.productos.length; i++) {
-        if(IDSeleccionado === sistema.productos[i].id) {
+        if(IDSeleccionado === Number(sistema.productos[i].id.substring(8))) {
             ProductoSeleccionado = sistema.productos[i];
             break;
         }
@@ -62,7 +62,7 @@ function RealizarCambioEnInventario() {
 
     let mensajeAMostrar = "";
     for(let i = 0; i < sistema.productos.length; i++) {
-        if(IDProductoElegido === sistema.productos[i].id) {
+        if(IDProductoElegido === Number(sistema.productos[i].id.substring(8))) {
             ProductoSeleccionado = sistema.productos[i];
             break;
         }
@@ -139,7 +139,7 @@ function ActividadBotonProducto() {
         let imagenNueva = document.querySelector("#inpImagenNuevoProducto").value;
 
         if(nombreNuevo !== "" && descNueva !== "" && precioNuevo !== 0 && imagenNueva !== "" && stockNuevo >= 0) {
-            let idNuevo = Number(sistema.productos.length) + 1;
+            let idNuevo = "ID_PROD_" + String(Number(sistema.productos.length) + 1);
             let productoNuevo = new Stock(idNuevo, nombreNuevo, descNueva, imagenNueva, precioNuevo, descuentoNuevo, activoNuevo, stockNuevo);
             sistema.productos.push(productoNuevo);
             document.querySelector("#pControlCrearProducto").innerHTML = `El producto se creó exitosamente, se le ha proporcionado el id: ${idNuevo}`;

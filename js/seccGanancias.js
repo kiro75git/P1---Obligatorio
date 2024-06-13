@@ -22,7 +22,7 @@ function VerGanancias(){
     let productoAinspeccionar = "";
     for (let i = 0; i < sistema.productos.length; i++) {
         productoAinspeccionar = sistema.productos[i];
-        let idProducto = sistema.productos[i].id
+        let idProducto = Number(sistema.productos[i].id.substring(8));
         let costeTotalEsteProducto = 0;
         let unidadesVendidasEsteProducto = 0;
         for (let y = 0; y < sistema.pedidos.length; y++) {

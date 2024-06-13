@@ -1,8 +1,7 @@
 // VER SECCION PEDIDOS Y HISTORIAL
 
 function ActualizarPedidosYHistorial() {
-    document.querySelector("#tablaPedidosAdmin").innerHTML = `
-                    <thead>
+    document.querySelector("#tablaPedidosAdminHead").innerHTML = `
                         <td>
                             ID en el Historial
                         </td>
@@ -26,10 +25,11 @@ function ActualizarPedidosYHistorial() {
                         </td>
                         <td>
                             Opciones
-                        </td>
-                    </thead>`;
-    document.querySelector("#tablaPedidosCliente").innerHTML = `
-                    <thead>
+                        </td>`;
+    document.querySelector("#tablaPedidosAdminCancelados").innerHTML = "";
+    document.querySelector("#tablaPedidosAdminConfirmados").innerHTML = "";
+    document.querySelector("#tablaPedidosAdminPendientes").innerHTML = "";
+    document.querySelector("#tablaPedidosClienteHead").innerHTML = `
                         <td>
                             Unidades
                         </td>
@@ -44,19 +44,25 @@ function ActualizarPedidosYHistorial() {
                         </td>
                         <td>
                             Opciones
-                        </td>
-                    </thead>`;
+                        </td>`;
+    document.querySelector("#tablaPedidosClienteCancelados").innerHTML = "";
+    document.querySelector("#tablaPedidosClienteConfirmados").innerHTML = "";
+    document.querySelector("#tablaPedidosClientePendientes").innerHTML = "";
     document.querySelector("#pedidosClienteIdentificacion").innerHTML = usuarioActivo;
 
+    let gastoTotalUsuario = 0;
     for(let i = 0; i < sistema.pedidos.length; i++) {
         let textoPedido = "";
         let disabledEnabled = "";
 
         if(sistema.pedidos[i].confirmacion !== "Pendiente") {
-            disabledEnabled = ` disabled="disabled" `
+            disabledEnabled = ` disabled="disabled" `;
         }
         
         if(usuarioActivo === sistema.pedidos[i].usuario) {
+            if(sistema.pedidos[i].confirmacion === "Confirmado") {
+                gastoTotalUsuario += sistema.pedidos[i].costeTotal;
+            }
             let idProducto = sistema.pedidos[i].productoId; 
             textoPedido = `
             <tr>
@@ -67,9 +73,22 @@ function ActualizarPedidosYHistorial() {
             <td style="display: flex;"><input ${disabledEnabled} id="btnCancelarPedido${sistema.pedidos[i].id}" type="button" value="Cancelar"></td>
             </tr>
             `
-            document.querySelector("#tablaPedidosCliente").innerHTML += textoPedido;
+            if(sistema.pedidos[i].confirmacion === "Pendiente") {
+                document.querySelector("#tablaPedidosClientePendientes").innerHTML += textoPedido;
+            }else if(sistema.pedidos[i].confirmacion === "Confirmado") {
+                document.querySelector("#tablaPedidosClienteConfirmados").innerHTML += textoPedido;
+            }else{ //Cancelado
+                document.querySelector("#tablaPedidosClienteCancelados").innerHTML += textoPedido;
+            }
         }
     }
+
+    document.querySelector("#tablaPedidosClienteFoot").innerHTML = `
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td>Sus gastos totales:</td>
+                                                                    <td>${gastoTotalUsuario}</td>`;
 
     for(let i = 0; i < sistema.pedidos.length; i++) {
         if(sistema.pedidos[i].usuario === usuarioActivo) {
@@ -88,7 +107,7 @@ function ActualizarPedidosYHistorial() {
         let saldoUsuario = 0;
         let disabledEnabled = "";
 
-        if(sistema.pedidos[i].confirmacion !== "Pendiente") {
+        if(sistema.pedidos[i].confirmacion !== "Pendiente" || !sistema.productos[idProducto-1].activo) {
             disabledEnabled = ` disabled="disabled" `
         }
 
@@ -97,7 +116,6 @@ function ActualizarPedidosYHistorial() {
                 saldoUsuario = sistema.usuarios[y].saldo;
             }
         }
-
         textoPedido = `
         <tr>
         <td>${sistema.pedidos[i].id}</td>
@@ -110,7 +128,13 @@ function ActualizarPedidosYHistorial() {
         <td style="display: flex;"><input ${disabledEnabled} id="btnConfirmarPedido${sistema.pedidos[i].id}" type="button" value="Confirmar"></td>
         </tr>
         `
-        document.querySelector("#tablaPedidosAdmin").innerHTML += textoPedido;
+        if(sistema.pedidos[i].confirmacion === "Pendiente") {
+            document.querySelector("#tablaPedidosAdminPendientes").innerHTML += textoPedido;
+        }else if(sistema.pedidos[i].confirmacion === "Confirmado") {
+            document.querySelector("#tablaPedidosAdminConfirmados").innerHTML += textoPedido;
+        }else{ //Cancelado
+            document.querySelector("#tablaPedidosAdminCancelados").innerHTML += textoPedido;
+        }
     }
 
     for(let i = 0; i < sistema.pedidos.length; i++) {
@@ -155,5 +179,6 @@ function efectuarConfirmacion(evt) {
         }
     }
 
+    ActualizarCatalogo();
     ActualizarPedidosYHistorial();
 }

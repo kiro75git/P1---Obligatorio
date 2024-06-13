@@ -76,6 +76,18 @@
 
             <h1> CATÁLOGO </h1>
 
+            <hr>
+
+            <h2>OFERTAS ESPECIALES</h2>
+
+            <!-- NO INGRESAR NADA DENTRO DE LA SECCION DE CARGA DE PRODUCTOS, SE ELIMINARA AUTOMATICAMENTE DESDE EL JS -->
+            <section id="seccionCargaDescuentosJS">
+
+            </section>
+            <!-- NO INGRESAR NADA DENTRO DE LA SECCION DE CARGA DE PRODUCTOS, SE ELIMINARA AUTOMATICAMENTE DESDE EL JS -->
+            <hr>
+
+            <h2>CATÁLOGO GENERAL</h2>
             <!-- NO INGRESAR NADA DENTRO DE LA SECCION DE CARGA DE PRODUCTOS, SE ELIMINARA AUTOMATICAMENTE DESDE EL JS -->
             <section id="seccionCargaProductosJS">
 
@@ -90,7 +102,14 @@
 
                 <h1> ADMINISTRACION DE PEDIDOS </h1>
                 <table id="tablaPedidosAdmin">
-                    
+                    <thead id="tablaPedidosAdminHead"></thead>
+                    <thead><td colspan="8">Pendientes</td></thead>
+                    <tbody id="tablaPedidosAdminPendientes"></tbody>
+                    <thead><td colspan="8">Cancelados</td></thead>
+                    <tbody id="tablaPedidosAdminCancelados"></tbody>
+                    <thead><td colspan="8">Confirmados</td></thead>
+                    <tbody id="tablaPedidosAdminConfirmados"></tbody>
+                    <tfoot id="tablaPedidosAdminFoot"></tfoot>
                 </table>
 
             </section>
@@ -100,7 +119,14 @@
                 <h1> MIS PEDIDOS </h1>
                 <h2 id="pedidosClienteIdentificacion"></h2>
                 <table id="tablaPedidosCliente">
-
+                    <thead id="tablaPedidosClienteHead"></thead>
+                    <thead><td colspan="8">Pendientes</td></thead>
+                    <tbody id="tablaPedidosClientePendientes"></tbody>
+                    <thead><td colspan="8">Cancelados</td></thead>
+                    <tbody id="tablaPedidosClienteCancelados"></tbody>
+                    <thead><td colspan="8">Confirmados</td></thead>
+                    <tbody id="tablaPedidosClienteConfirmados"></tbody>
+                    <tfoot id="tablaPedidosClienteFoot"></tfoot>
                 </table>
 
             </section>
