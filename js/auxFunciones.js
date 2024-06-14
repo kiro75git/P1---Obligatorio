@@ -132,36 +132,37 @@ function validarTarjeta(nroTarjeta, codigoCVC) {
 
 //verificar ingreso nombre y apellido
 function verificarNombreYapellido(nombreUsuario){
-    let verificarEspacio = false;
-    let hayEspacios = 0;
+    let verificarEspacio = false;  
+    let hayEspacios = 0;    //contador de espacios
     for(let i = 0; i < nombreUsuario.length; i++){
-        let valorCaracter = nombreUsuario.charAt(i);
+        let valorCaracter = nombreUsuario.charAt(i);    //bucle que recorre el string de usuario
         
         if(valorCaracter === " "){
-            hayEspacios++;
+            hayEspacios++;              //si se encuentra un espacio el contador aumenta
         }
     }
     
     if(hayEspacios > 0){
-        verificarEspacio = true;
+        verificarEspacio = true;        //si hay al menos un espacio la variable cambia a true, confirmando asi que cumple el requisito
     } else {
         document.querySelector("#pError").innerHTML = "Las credenciales no coinciden, intentelo denuevo"
     }
     
-    return verificarEspacio;
+    return verificarEspacio;   //devuelve el resultado de la funcion (true o false)
 }
 
+//funcion para volver case insensitive el username ingresado y que verifique si ya existe
 function VerificarNombreUsuario(nombreUsuarioIng){
     let usuarioValido = true;
-    let usuarioMin = nombreUsuarioIng.toLowerCase();
+    let usuarioMin = nombreUsuarioIng.toLowerCase();        //convierte al string en minusculas para volverlo case insensitive
     for(let i = 0; i < sistema.usuarios.length; i++){
 
-        if(usuarioMin === sistema.usuarios[i].username){
+        if(usuarioMin === sistema.usuarios[i].username){    //se recorre el string e itera sobre la clase sistemas, si el string ya esta registado se queda en true
             usuarioValido = false;
             console.log("el nombre de usuario elegido ya existe");
         } else {
             console.log("nombre de usuario valido");
         }
     }
-    return usuarioValido;
+    return usuarioValido;   //devuelve el resultado
 }

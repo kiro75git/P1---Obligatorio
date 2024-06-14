@@ -240,17 +240,17 @@ footer a {
   padding: 2%;
 }
 
-#sectCatalogo article {
+#sectCatalogo article, #vistaPreviaProducto article {
   display: flex;
   justify-content: center;
 }
 
-#sectCatalogo .producto {
+#sectCatalogo .producto, #vistaPreviaProducto .producto {
   text-align: center;
   box-sizing: border-box;
 }
 
-#sectCatalogo figure img {
+#sectCatalogo figure img, #vistaPreviaProducto figure img {
   width: 200px;
   height: 200px;
   border: solid 1px black;

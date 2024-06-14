@@ -1,6 +1,6 @@
 // VER SECCION PEDIDOS Y HISTORIAL
 
-function ActualizarPedidosYHistorial() {
+function ActualizarPedidosYHistorial() {  //funcion que genera un DOM con la información de los pedidos
     document.querySelector("#tablaPedidosAdminHead").innerHTML = `
                         <td>
                             ID en el Historial
@@ -100,6 +100,8 @@ function ActualizarPedidosYHistorial() {
         }
     }
 
+    let seHanCanceladoPedidos = false;
+
     for(let i = 0; i < sistema.pedidos.length; i++) {
         let textoPedido = "";
 
@@ -108,7 +110,11 @@ function ActualizarPedidosYHistorial() {
         let disabledEnabled = "";
 
         if(sistema.pedidos[i].confirmacion !== "Pendiente" || !sistema.productos[idProducto-1].activo) {
-            disabledEnabled = ` disabled="disabled" `
+            disabledEnabled = ` disabled="disabled" `;
+        }
+        if(sistema.productos[idProducto-1].stock < sistema.pedidos[i].unidades && sistema.pedidos[i].confirmacion !== "Cancelado") {
+            sistema.pedidos[i].confirmacion = "Cancelado";
+            seHanCanceladoPedidos = true;
         }
 
         for(let y = 0; y < sistema.usuarios.length; y++) {
@@ -144,6 +150,10 @@ function ActualizarPedidosYHistorial() {
             identifInputConfirmar.idBotonConfirmar = identifInputConfirmar.id;
         }
     }
+
+    if(seHanCanceladoPedidos) {
+        alert(`Algunos pedidos se han cancelado automáticamente, debido a falta de stock`);
+    }
 }
 
 // FUNCION INDIVIDUAL PARA CADA BOTON DE CANCELACION DE PEDIDOS, UTILIZA UN EVENTO Y REALIZA LA ACCION CORRESPONDIENTE DIRECTAMENTE
@@ -162,12 +172,20 @@ function efectuarCancelacion(evt) {
 function efectuarConfirmacion(evt) {
     let idPedido = Number(evt.currentTarget.idBotonConfirmar.substring(18));
     console.log(`Usted intentó confirmar el pedido ${idPedido}`);
+    let pedidoActual = sistema.pedidos[idPedido-1];
 
-    sistema.pedidos[idPedido-1].confirmacion = "Confirmado";
+    let idProducto = pedidoActual.productoId;
 
-    if(sistema.pedidos[idPedido-1].confirmacion = "Confirmado"){
+    if(sistema.productos[idProducto-1].stock >= pedidoActual.unidades) {
+        pedidoActual.confirmacion = "Confirmado";
+    }else {
+        alert(`Intentó confirmar un pedido para cual no hay stock suficiente, dicho pedido se ha cancelado automáticamente.`);
+        pedidoActual.confirmacion = "Cancelado";
+    }
+
+
+    if(pedidoActual.confirmacion = "Confirmado"){
         for(let i = 0; i < sistema.usuarios.length; i++){
-            let pedidoActual = sistema.pedidos[idPedido-1];
             if(sistema.usuarios[i].username === pedidoActual.usuario){
                 sistema.usuarios[i].saldo -= pedidoActual.costeTotal;
                 sistema.productos[pedidoActual.productoId-1].stock -= pedidoActual.unidades;

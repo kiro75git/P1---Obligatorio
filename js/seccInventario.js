@@ -120,7 +120,7 @@ function RealizarCambioEnInventario() {
 // FUNCIONALIDAD DEL BOTON DE ELEGIR CREAR UN NUEVO PRODUCTO, DESPLEGAR EL MENU CON SUS OPCIONES Y A SU VEZ CREAR UN NUEVO PRODUCTO EN CASO DE QUE SE RELLENEN LOS CAMPOS
 
 function ActividadBotonProducto() {
-    if(String(document.querySelector("#btnCrearNuevoProducto").value) === "Deseo crear un nuevo producto") {
+    if(String(document.querySelector("#btnCrearNuevoProducto").value) === "Deseo crear un nuevo producto") {     //si el boton crear nuevo producto es igual a "deseo crear un nuevo producto se genera un DOM con la interfaz para crear el mismo"
         document.querySelector("#formCrearProducto").innerHTML = `<label for="inpNombreNuevoProducto">Nombre: </label><input type="text" id="inpNombreNuevoProducto">
                     <label for="inpDescNuevoProducto">Descripcion: </label><input type="text" id="inpDescNuevoProducto">                               
                     <label for="inpNombreNuevoProducto">Precio: </label><input type="number" id="inpPrecioNuevoProducto">
@@ -130,22 +130,29 @@ function ActividadBotonProducto() {
                     <label for="inpImagenNuevoProducto">Imagen:</label> <br>
                                                                         <form>
                                                                         <label for="botinesSlc">Botines</label>
-                                                                        <input type="radio" id="botinesSlc" value="${urlImagenes[0]}" name="newProductImg"> <br>
+                                                                        <input type="radio" id="botinesSlc" value="${urlImagenes[0]}" name="newProductImg">   
 
                                                                         <label for="mediasSlc">Medias</label>
-                                                                        <input type="radio" id="mediasSlc" value="${urlImagenes[1]}" name="newProductImg"> <br>
+                                                                        <input type="radio" id="mediasSlc" value="${urlImagenes[1]}" name="newProductImg"> 
 
                                                                         <label for="cuelloSlc">Cuello termico</label>
-                                                                        <input type="radio" id="cuelloSlc" value="${urlImagenes[2]}" name="newProductImg"> <br>
+                                                                        <input type="radio" id="cuelloSlc" value="${urlImagenes[2]}" name="newProductImg"> 
 
                                                                         <label for="shortSlc">Short deportivo</label>
-                                                                        <input type="radio" id="shortSlc" value="${urlImagenes[3]}" name="newProductImg"> <br>
+                                                                        <input type="radio" id="shortSlc" value="${urlImagenes[3]}" name="newProductImg"> 
 
                                                                         <label for="gorroSlc">Gorro</label>
-                                                                        <input type="radio" id="gorroSlc" value="${urlImagenes[4]}" name="newProductImg"> <br>
-                                                                        </form>`;
+                                                                        <input type="radio" id="gorroSlc" value="${urlImagenes[4]}" name="newProductImg"> 
+                                                                        </form>`; //cada radio toma la url de la foto deseada, las url estan depositadas en un array en el apartado js de clases
+
+        let radiosVistaPrevia = document.querySelectorAll('input[name="newProductImg"]');  
+        for (var j = 0; j < radiosVistaPrevia.length; j++) {
+            radiosVistaPrevia[j].addEventListener("click", vistaPrevia); //se toma el valor del input seleccionado para mostrar una vista previa de la imagen deseada
+        } 
+
+
         document.querySelector("#btnCrearNuevoProducto").value = "Crear Producto";
-    }else if(String(document.querySelector("#btnCrearNuevoProducto").value) === "Crear Producto") {
+    }else if(String(document.querySelector("#btnCrearNuevoProducto").value) === "Crear Producto") {    //si se clickea en crear producto se tomaran todos los valores ingresados
         let imagenNueva = null; // variable de imagen vacía (si no se selecciona imagen no se actualiza)
         let nombreNuevo = document.querySelector("#inpNombreNuevoProducto").value;
         let descNueva = document.querySelector("#inpDescNuevoProducto").value;
@@ -155,17 +162,18 @@ function ActividadBotonProducto() {
         let stockNuevo = document.querySelector("#inpStockNuevoProducto").value;
         let slcImagen = document.querySelectorAll('input[name="newProductImg"]');
 
-        for(let i = 0;i < slcImagen.length; i++){
-            if (slcImagen[i].checked){
-                imagenNueva = slcImagen[i].value;
+        for(let i = 0;i < slcImagen.length; i++){  //se crea un bucle para iterar sobre la familia de radios
+            if (slcImagen[i].checked){      //verifica cual de los radios esta seleccionado
+                imagenNueva = slcImagen[i].value; //y se toma el valor del mismo
     
                 console.log(`${imagenNueva} fue seleccionado`);
             }
         }
 
-        if(nombreNuevo !== "" && descNueva !== "" && precioNuevo !== 0 && imagenNueva !== null && stockNuevo >= 0) {
+        if(nombreNuevo !== "" && descNueva !== "" && precioNuevo > 0 && imagenNueva !== null && stockNuevo >= 0) {  //si se cumplen todas estas condiciones el producto se crea en catálogo
             let idNuevo = "ID_PROD_" + String(Number(sistema.productos.length) + 1);
-            let productoNuevo = new Stock(idNuevo, nombreNuevo, descNueva, imagenNueva, precioNuevo, descuentoNuevo, activoNuevo, stockNuevo);
+            let productoNuevo = new Stock(idNuevo, nombreNuevo, descNueva, imagenNueva, precioNuevo, descuentoNuevo, activoNuevo, stockNuevo); //se crea una nueva isntancia de stock
+            
             sistema.productos.push(productoNuevo);
             document.querySelector("#pControlCrearProducto").innerHTML = `El producto se creó exitosamente, se le ha proporcionado el id: ${idNuevo}`;
 
@@ -173,9 +181,45 @@ function ActividadBotonProducto() {
             document.querySelector("#pControlCrearProducto").innerHTML = "Ocurrió un error procesando los datos ingresados (probablemente faltó ingresar algun dato)";
         }
         document.querySelector("#btnCrearNuevoProducto").value = "Deseo crear un nuevo producto";
+        document.querySelector("#vistaPreviaProducto").innerHTML = "";
         // limpiar 
         document.querySelector("#formCrearProducto").innerHTML = "";
     }
 }
+
+function vistaPrevia(){
+    let imagenPreview = document.querySelectorAll('input[name="newProductImg"]');
+    let mostrarNuevaImagen = null;
+
+    for(let r = 0; r < imagenPreview.length; r++){
+        if (imagenPreview[r].checked){
+            mostrarNuevaImagen = imagenPreview[r].value;
+
+            console.log(`${mostrarNuevaImagen} fue seleccionado`);
+        }
+    }
+    let nombreProdNuevo = document.querySelector("#inpNombreNuevoProducto").value;
+    let precioProdNuevo = document.querySelector("#inpPrecioNuevoProducto").value;
+    let descProdNuevo = document.querySelector("#inpDescNuevoProducto").value;
+    let textoHtmlDescuentoTrue = "";
+    let descuentoProdNuevo = document.querySelector("#inpDescuentoNuevoProducto").checked;
+    if(descuentoProdNuevo) {
+        textoHtmlDescuentoTrue = `<h3>¡DE DESCUENTO!</h3>`;
+    }
+    document.querySelector("#vistaPreviaProducto").innerHTML = `
+                    <article class="producto">
+            <figure>
+                <img src="${mostrarNuevaImagen}" alt="${nombreProdNuevo}">
+                <figcaption>
+                    <h4>${nombreProdNuevo} - ${precioProdNuevo}</h4>
+                    <p>${descProdNuevo}</p>
+                    ${textoHtmlDescuentoTrue}
+                </figcaption>
+            </figure>
+        </article>
+    `;
+}
+
+document.querySelector("#formCrearProducto").addEventListener("click", vistaPrevia);
 
 document.querySelector("#btnCrearNuevoProducto").addEventListener("click", ActividadBotonProducto);
