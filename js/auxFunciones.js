@@ -5,7 +5,7 @@ function VerificarPass(pass) {
     let hasNum = false;
     if(password.length >= 5) {
             for(let i = 0; i < password.length; i++) {
-                    switch (password.charAt(i)) {
+                    switch (password.charAt(i)) { // verifica que tenga un numero
                             case "0":
                             case "1":
                             case "2":
@@ -16,7 +16,7 @@ function VerificarPass(pass) {
                             case "7":
                             case "8":
                             case "9":
-                                    if(i === 0) {
+                                    if(i === 0) { // verifica que no empiece por un numero
                                             error = "numeroinicio";
                                     }
                                     hasNum = true;
@@ -30,7 +30,7 @@ function VerificarPass(pass) {
             }
             let minCount = 0;
             let mayCount = 0;
-            for(let i = 0; i < password.length; i++) {
+            for(let i = 0; i < password.length; i++) { // verifica que no tenga espacios, y que tenga minusculas y mayusculas
                     if(password.charAt(i) === " ") {
                             error = "espacio"
                     }else if(password.charAt(i) === password.charAt(i).toUpperCase()) {
@@ -47,7 +47,7 @@ function VerificarPass(pass) {
 
     let mensaje = "OK";
 
-    if(error === "longitud") {
+    if(error === "longitud") { // dependiendo del error que se devolvió, se le asigna un texto de error
             mensaje = "Su contraseña debe tener al menos 5 caracteres";
     }else if(error === "mayusminus") {
             mensaje = "Su contraseña debe tener una mayúscula y una minúscula";
@@ -69,10 +69,10 @@ function validarTarjeta(nroTarjeta, codigoCVC) {
     codigoValido = false;
 
     if(String(codigoCVC).length === 3) {
-        codigoValido = true;
+        codigoValido = true;  //si la clave es de 3 digitos devuelve true
     }
 
-    //funcion para verificar tarjeta:
+    //funcion para verificar tarjeta mediante metodo de Luhn:
     
     let dev = false;
     let contadorGuiones = 0;
@@ -85,7 +85,7 @@ function validarTarjeta(nroTarjeta, codigoCVC) {
         }
     }
 
-    let tarjetaDepurada = "";
+    let tarjetaDepurada = ""; // crea una tarjeta depurada borrando todos los caracteres no numericos (-, $, .)
     for(let i = 0; i < nroTarjeta.length; i++) {
         let numero = Number(nroTarjeta.charAt(i));
         if(!isNaN(numero)) {
@@ -93,7 +93,7 @@ function validarTarjeta(nroTarjeta, codigoCVC) {
         }
     }
 
-    if (contadorGuiones === 3){
+    if (contadorGuiones === 3){ // verifica que la tarjeta tenga el formato correcto
         let acumulador = 0;
         let digitoVerificar = tarjetaDepurada.charAt(tarjetaDepurada.length - 1);
         
@@ -117,7 +117,7 @@ function validarTarjeta(nroTarjeta, codigoCVC) {
         let multiplicadoStr = String(multiplicado);
         let digitoVerificador = multiplicadoStr.charAt(multiplicadoStr.length - 1);
         if (digitoVerificar === digitoVerificador) {
-            dev = true;
+            dev = true; // si el digito final de la tarjeta se verifica contra luhn, devuelve true, de lo contrario, devuelve false
         }
     
     }else {

@@ -3,11 +3,11 @@
 function ActualizarInventario() {
     let options = ``;
     for(let i = 0; i < sistema.productos.length; i++) {
-        options += `<option value="${i}">${sistema.productos[i].nombre}</option>`;
+        options += `<option value="${i}">${sistema.productos[i].nombre}</option>`; // actualiza el select con todos los productos
     }
     document.querySelector("#slcProductoAdministrar").innerHTML = `${options}`;
     mostrarElementosOcultos(tipoDeSesion);
-    document.querySelector("#btnCrearNuevoProducto").value = "Deseo crear un nuevo producto";
+    document.querySelector("#btnCrearNuevoProducto").value = "Deseo crear un nuevo producto"; // le proporciona eventlisteners a las funcionalidades de la seccion
     document.querySelector("#formCrearProducto").innerHTML = ""
 }
 
@@ -32,7 +32,7 @@ function MostrarInformacionProdcutoInventario() {
                                                                     Activo: ${ProductoSeleccionado.activo}<br>
                                                                     Stock:  ${ProductoSeleccionado.stock}<br>
                                                                     Imagen (link): ${ProductoSeleccionado.imagen}<br>
-                                                                    ID:${ProductoSeleccionado.id}`
+                                                                    ID:${ProductoSeleccionado.id}`; // muestra en un cuadro toda la informacon del producto
     }
 }
 document.querySelector("#slcProductoAdministrar").addEventListener("click", MostrarInformacionProdcutoInventario);
@@ -47,7 +47,7 @@ function DesplegarMenuParaModificarInventario() {
         document.querySelector("#parametroACambiarSection").innerHTML = `<label for="parametroACambiar" class="invLabel"> Ingrese el nuevo valor </label><input type="number" id="parametroACambiar">`;
     }else if(parametroACambiar === "nombre" || parametroACambiar === "descripcion" || parametroACambiar === "imagen") {
         document.querySelector("#parametroACambiarSection").innerHTML = `<label for="parametroACambiar" class="invLabel"> Ingrese ${parametroACambiar} deseado/a </label><input type="text" id="parametroACambiar">`;
-    }
+    }; // cambia las opciones para modificarle los datos al producto en base a que tipo de parametro se le quiere modificar
     document.querySelector("#parametroACambiarSection").innerHTML += `<input type="button" value="Realizar cambio" id="btnRealizarCambiosEnInventario">`
     document.querySelector("#btnRealizarCambiosEnInventario").addEventListener("click", RealizarCambioEnInventario);
 }
@@ -64,7 +64,7 @@ function RealizarCambioEnInventario() {
     for(let i = 0; i < sistema.productos.length; i++) {
         if(IDProductoElegido === Number(sistema.productos[i].id.substring(8))) {
             ProductoSeleccionado = sistema.productos[i];
-            break;
+            break; // se toma el id, substring(8) sire para tomar los ultimos caracteres del string, osea los numeros del id
         }
     }
     let ParametroDentroDelProducto = undefined;
@@ -73,7 +73,7 @@ function RealizarCambioEnInventario() {
         if(parametroACambiarProductoElegido !== undefined) {
             if(nuevoValor === "on") {
                 nuevoValor = document.querySelector("#parametroACambiar").checked;
-            }
+            }; // si el valor es on, siginifca que se trata de una checkbox, en ese caso se toma el .checked, que devuelve un booleano
         }
         switch (parametroACambiarProductoElegido) {
             case "nombre":
@@ -180,8 +180,8 @@ function ActividadBotonProducto() {
         }else {
             document.querySelector("#pControlCrearProducto").innerHTML = "Ocurrió un error procesando los datos ingresados (probablemente faltó ingresar algun dato)";
         }
-        document.querySelector("#btnCrearNuevoProducto").value = "Deseo crear un nuevo producto";
-        document.querySelector("#vistaPreviaProducto").innerHTML = "";
+        document.querySelector("#btnCrearNuevoProducto").value = "Deseo crear un nuevo producto"; // se reemplaza el texto por el mismo que habia cuando el form estaba escondido
+        document.querySelector("#vistaPreviaProducto").innerHTML = ""; 
         // limpiar 
         document.querySelector("#formCrearProducto").innerHTML = "";
     }
@@ -205,7 +205,7 @@ function vistaPrevia(){
     let descuentoProdNuevo = document.querySelector("#inpDescuentoNuevoProducto").checked;
     if(descuentoProdNuevo) {
         textoHtmlDescuentoTrue = `<h3>¡DE DESCUENTO!</h3>`;
-    }
+    } // se toman los valores del form para crear la vista previa, el codigo html es exactamente igual al del catalogo, por lo que deberia verse identico
     document.querySelector("#vistaPreviaProducto").innerHTML = `
                     <article class="producto">
             <figure>
@@ -217,7 +217,7 @@ function vistaPrevia(){
                 </figcaption>
             </figure>
         </article>
-    `;
+    `; // mediante este codigo se muestra una vista previa del producto mientras se esta creando
 }
 
 document.querySelector("#formCrearProducto").addEventListener("click", vistaPrevia);

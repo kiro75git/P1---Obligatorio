@@ -60,6 +60,7 @@ class Sistema {
             new Usuario("javier@gmail.com", "Javier", "javi", "5243-1303-1185-0979", "321", "Javi1234", "cliente", 3000)
         ];
 
+            //productos generados
         this.productos = [
             new Stock("PROD_ID_1", "Campera Nike", "Campera marca Nike, deportiva negra", "https://f.fcdn.app/imgs/63379c/www.globalsports.com.uy/gls/88f1/original/catalogo/NKBV2648-010-1/1500-1500/campera-nike-sportswear-club-black.jpg", 500, true, true, 30),
             new Stock("PROD_ID_2", "Campera Adidas", "Campera marca Adidas superstar, deportiva negra", "https://f.fcdn.app/imgs/323a82/www.zooko.com.uy/zoo/37bb/original/catalogo/ADCW1256-1032-1/460x460/campera-adidas-superstar-tt-black.jpg", 700, false, true, 40),
@@ -73,6 +74,7 @@ class Sistema {
             new Stock("PROD_ID_10", "Campera de lluvia Nike", "Campera de lluvia marca Nike negra", "https://f.fcdn.app/imgs/0fd60e/www.zooko.com.uy/zoo/2db3/original/catalogo/NKDX0672-010-1/1920-1200/campera-nike-club-black.jpg", 1000, false, true, 20),
         ]   
 
+            //pedidos solicitados por usuarios compradores
         this.pedidos = [
             new HistorialCompra(1, "lucasbenta", 2, 700, 1, "Pendiente"),
             new HistorialCompra(2, "mariaadu", 3, 900, 1, "Confirmado"),
@@ -86,6 +88,7 @@ class Sistema {
         
     }
 
+    //funcion interna a la clase para crear un usuario nuevo
     agregarUsuario(mail, nombre, usuario, tarjetaCredito, cvc, pass, tipo, saldo) {
         let objUsuario = new Usuario(mail, nombre, usuario, tarjetaCredito, cvc, pass, tipo, saldo);
         this.usuarios.push(objUsuario);

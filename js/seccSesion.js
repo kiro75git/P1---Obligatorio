@@ -11,10 +11,10 @@ function Registrar() {
     let tarjetaInput = String(document.querySelector("#ingresoTarjeta").value);
     let codigoCVCinput = Number(document.querySelector("#ingresoCVC").value);
     let nombreInput = String(document.querySelector("#ingresoNombre").value);
-
+    // toma los valores de los campos de texto y numericos
     
-    if(verificarNombreYapellido(nombreInput)) {
-        if(validarTarjeta(tarjetaInput, codigoCVCinput)) {
+    if(verificarNombreYapellido(nombreInput)) {                 // hace uso de las funciones auxiliares para verificar algunos campos
+        if(validarTarjeta(tarjetaInput, codigoCVCinput)) {      
             if(VerificarNombreUsuario(usernameInput)){
                 if(VerificarPass(passInput) === "OK") {
                     sistema.agregarUsuario(mailInput, nombreInput, usernameInput, tarjetaInput, codigoCVCinput, passInput, "cliente", saldoInicialDeUsuarioNuevo);
@@ -28,12 +28,12 @@ function Registrar() {
                 }
             }
         }else {
-            console.log("Tarjeta no valida");
+            console.log("Tarjeta no valida");           // devuelve codigos de error en base a que parte de la verificacion falló
         }
     }else {
         document.querySelector("#pError").innerHTML = `Ingrese su nombre y apellido separados por un espacio.`;
         console.log("a");
-        document.querySelector("#formRegistro").style.display = "block";
+        document.querySelector("#formRegistro").style.display = "block"; // este else se llama en caso de que sea la primera vez que se presiona el boton de registro, en ese caso se muestran los campos de texto, la siguiente vez que se presione el mismo boton se intentará registrar
     }
     
 }
@@ -52,13 +52,13 @@ function Ingresar() {
       
                 // bien
                 ExitoAlIniciarSesion(sistema.usuarios[i].tipoUsuario, sistema.usuarios[i].username, sistema.usuarios[i].saldo)
-                break;
+                break; // si se loguea con exito, se llama a la funcion para iniciar sesión
             }else{
                 // mal
-                document.querySelector("#pError").innerHTML = "Las credenciales no coinciden, intentelo denuevo";
+                document.querySelector("#pError").innerHTML = "Las credenciales no coinciden";
             }
         }else{
-            document.querySelector("#pError").innerHTML = "Usuario no encontrado, intentelo denuevo";
+            document.querySelector("#pError").innerHTML = "Usuario no encontrado";
         }
     } 
 }
@@ -67,13 +67,13 @@ document.querySelector("#btnInicioSesion").addEventListener("click", Ingresar);
 // FUNCIONALIDAD AL INICIAR SESION EXITOSAMENTE
 
 function ExitoAlIniciarSesion(sesionDelUsuario, nombreDelUsuario) {
-    tipoDeSesion = sesionDelUsuario;
+    tipoDeSesion = sesionDelUsuario; // el tipo de sesion se utilizará para decidir que mostrarle al usuario
 
     mostrarElementosOcultos(tipoDeSesion);
 
     document.querySelector("#textoNavSesion").innerHTML = `Cerrar sesión`;
 
-    usuarioActivo = nombreDelUsuario;
+    usuarioActivo = nombreDelUsuario; // se declara el usuario activo, esta variable se utilizará en muchos otros lados de la página, y solo se limpiará al cerrar sesión
 
     ActualizarSaldo()
 
@@ -97,7 +97,7 @@ function ActualizarSaldo() {
 // FUNCIONALIDAD DEL CIERRE DE SESION
 
 function CerrarSesion() {
-    tipoDeSesion = "cerrada";
+    tipoDeSesion = "cerrada"; // se limpia el tipo de sesion
 
     console.log("Se cerró la sesion");
 
@@ -105,7 +105,7 @@ function CerrarSesion() {
 
     document.querySelector("#textoNavSesion").innerHTML = `Iniciar sesión`;
 
-    usuarioActivo = "";
+    usuarioActivo = ""; // se limpia el usuario activo
 
     document.querySelector("#infoUsuario").style.display = "none";
 }

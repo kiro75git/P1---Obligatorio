@@ -7,13 +7,13 @@
     <title>Obligatorio de programación</title>
 </head>
 <body>
-    <header>
+    <header> <!-- Los logotipos el usuario y el saldo en el header serán visibles en toda la página -->
         <img id="logo" src="https://p1.develotion.com/cart.jpg" alt="logo" />
         <div id="infoUsuario" style="display:none;">
             <h4 id="displayUsuario">Ejemplo</h4>
             <h6 id="displaySaldo">Saldoejemplo: $940352</h6>
         </div>
-        <nav>
+        <nav> <!-- La barra de navegación principal se ocultará o no en base al usuario ingresado -->
             <ul id="navPrincipal">
                 
                 <li id="btnSectCatalogo" class="elementoOcultable cliente admin">
@@ -35,19 +35,19 @@
             </ul>
         </nav>
     </header>
-    <main>
+    <main> <!-- Aquí se encuentran las secciones de la página -->
         <section class="seccion" id="sectSesion">
             <form id="formInicioSesion">
 
                 <h1>INICIO DE SESION</h1>
 
-                <label for="ingresoUsername">Nombre Usuario:</label>   <!--solo se verá al hacer click en registrar-->
+                <label for="ingresoUsername">Nombre Usuario:</label>
                 <input type="text" id="ingresoUsername" placeholder="Luisito">
 
                 <label for="ingresoContra">Contraseña:</label>
                 <input type="password" id="ingresoContra" placeholder="Ingrese contraseña">
 
-                <section class="subsection" id="formRegistro" style="display: none;">
+                <section class="subsection" id="formRegistro" style="display: none;"> <!-- Dentro de esta subsección se encuentran las opciones para registrarse -->
 
                     <br>
                     <label for="ingresoNombre">Nombre y apellido:</label>
@@ -81,10 +81,11 @@
             <h2>OFERTAS ESPECIALES</h2>
 
             <!-- NO INGRESAR NADA DENTRO DE LA SECCION DE CARGA DE PRODUCTOS, SE ELIMINARA AUTOMATICAMENTE DESDE EL JS -->
+            <!-- Estas secciones son rellenadas con cada actualización de la página desde el código de javascript mediante un innerHTMl -->
             <section id="seccionCargaDescuentosJS">
 
             </section>
-            <!-- NO INGRESAR NADA DENTRO DE LA SECCION DE CARGA DE PRODUCTOS, SE ELIMINARA AUTOMATICAMENTE DESDE EL JS -->
+
             <hr>
 
             <h2>CATÁLOGO GENERAL</h2>
@@ -92,11 +93,10 @@
             <section id="seccionCargaProductosJS">
 
             </section>
-            <!-- NO INGRESAR NADA DENTRO DE LA SECCION DE CARGA DE PRODUCTOS, SE ELIMINARA AUTOMATICAMENTE DESDE EL JS -->
 
         </section>
 
-        <section class="seccion" id="sectPedidos">
+        <section class="seccion" id="sectPedidos"> <!-- En esta sección de encuentran las tablas con los pedidos, ambas se rellenan desde el javascript, pero cambia su visibilidad en base al usuario -->
 
             <section id="pedidosAdmin" class="visibilidadVariable admin">
 
@@ -133,12 +133,12 @@
 
         </section>
 
-        <section class="seccion" id="sectAdministracionDeInventario">
-            <section id="seccionAdminInventarioJS">
+        <section class="seccion" id="sectAdministracionDeInventario"> <!-- Seccion de inventario, aquí se ve la información completa de los productos, y se puede modificar cualquier aspecto o agregar nuevos productos -->
+            <section id="seccionAdminInventarioJS"> 
             <div style="display: flex;">
                 <select id="slcProductoAdministrar"></select>
                 <label for="slcParametroACambiar" class="invLabel"> Parámetro que desea cambiar: </label>
-                <select id="slcParametroACambiar">
+                <select id="slcParametroACambiar">  <!-- Se puede cambiar cualquier parámetro del producto a excepción de su id -->
                     <option value="nombre">Nombre</option>
                     <option value="descripcion">Descripcion</option>
                     <option value="activo">Activo</option>
@@ -157,6 +157,7 @@
             <div style="display:flex;"> 
                 <section id="creacionNuevoProductoJS">
                     <!-- NO INGRESAR NADA DENTRO DE LA SECCION DE CREACION DE PRODUCTOS, SE ELIMINARA AUTOMATICAMENTE DESDE EL JS -->
+                    <!-- Estas secciones son rellenadas con cada actualización de la página desde el código de javascript mediante un innerHTMl -->
                     <form id="formCrearProducto">
                         
                     </form>
@@ -171,7 +172,7 @@
 
         </section>
 
-        <section class="seccion" id="sectGanancias">
+        <section class="seccion" id="sectGanancias"> <!-- Sección de ganancias, se llena desde el javascript mediante innerHTML -->
 
             <h1>GANANCIAS</h1>
             
