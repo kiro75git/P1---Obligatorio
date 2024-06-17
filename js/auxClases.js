@@ -48,16 +48,16 @@ class Sistema {
             //admins
             new Usuario("santi@gmail.com", "Santiago Szucs", "santiszucs", "7754-8901-1011-6709", "345", "Santi0000", "admin", 18000),
             new Usuario("lucas@gmail.com", "Lucas Bentancur", "lucasbenta", "4456-6765-8409-1010", "765", "Lucas0000", "admin", 17000),
-            new Usuario("sfagnoni@gmail.com", "Santiago Fagnini", "sfagnoni", "5506-2559-8133-4939", "476", "SantiF1234", "admin", 13000),
+            new Usuario("sfagnoni@gmail.com", "Santiago Fagnoni", "sfagnoni", "5506-2559-8133-4939", "476", "SantiF1234", "admin", 13000),
             new Usuario("raul@gmail.com", "Raul Gimenez", "rgimenez", "3781-8261-4820-1573", "435", "Raul7777", "admin", 10000),
             new Usuario("luis@gmail.com", "Luis Suarez", "luisito", "6011-5730-9387-5086", "499", "Luis2011", "admin", 10000),
 
             //compradores
-            new Usuario("maria@gmail.com", "Maria", "mariaadu", "3267-8902-5986-1232", "911", "Maria0000", "cliente", 3000),
-            new Usuario("martin@gmail.com", "Martin", "martoo", "4539-6253-0847-8250", "110", "Martin0000", "cliente", 3000),
-            new Usuario("rafael@gmail.com", "Rafael", "rafa", "6833-7894-1122-1342", "770", "Rafa0000", "cliente", 3000),
-            new Usuario("renaldo@gmail.com", "Renaldo", "rena", "4916-1035-6733-4187", "501", "Rena0000", "cliente", 3000),
-            new Usuario("javier@gmail.com", "Javier", "javi", "5243-1303-1185-0979", "321", "Javi1234", "cliente", 3000)
+            new Usuario("maria@gmail.com", "Maria Adu", "mariaadu", "3267-8902-5986-1232", "911", "Maria0000", "cliente", 3000),
+            new Usuario("martin@gmail.com", "Martin Valverde", "martoo", "4539-6253-0847-8250", "110", "Martin0000", "cliente", 3000),
+            new Usuario("rafael@gmail.com", "Rafael Quiroga", "rafa", "6833-7894-1122-1342", "770", "Rafa0000", "cliente", 3000),
+            new Usuario("renaldo@gmail.com", "Renaldo Martinez", "rena", "4916-1035-6733-4187", "501", "Rena0000", "cliente", 3000),
+            new Usuario("javier@gmail.com", "Javier Milei", "javi", "5243-1303-1185-0979", "321", "NoHayPlata0000", "cliente", 3000)
         ];
 
             //productos generados
